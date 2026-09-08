@@ -292,7 +292,7 @@ st.markdown(
     .ytd-item:first-child {padding-left:4px;}
     .ytd-item:last-child {border-right:0;}
     .ytd-label {font-size:12px;color:#d7e6f3;}
-    .ytd-value {font-size:21px;font-weight:750;margin-top:3px;}
+    .ytd-value {font-size:21px;font-weight:750;margin-top:3px;white-space:nowrap;}
 
     .table-head, .bar-row {
         display:grid;
@@ -383,6 +383,29 @@ st.markdown(
         z-index:999;
     }
 
+
+    /* Compact segmented controls */
+    div[data-testid="stSegmentedControl"] {
+        margin-top: 6px;
+        margin-bottom: 2px;
+    }
+    div[data-testid="stSegmentedControl"] > div {
+        justify-content:flex-end;
+    }
+    div[data-testid="stSegmentedControl"] button {
+        min-height:34px !important;
+        border-color:rgba(62,139,208,.55) !important;
+        background:rgba(6,35,65,.85) !important;
+        color:#dcebf7 !important;
+        font-size:12px !important;
+        padding:5px 14px !important;
+    }
+    div[data-testid="stSegmentedControl"] button[aria-pressed="true"] {
+        background:linear-gradient(180deg,#1e7cff,#1767e5) !important;
+        color:white !important;
+        box-shadow:0 0 12px rgba(30,124,255,.28);
+    }
+
     .admin-note {
         border:1px solid rgba(16,201,255,.55);
         border-radius:10px;
@@ -408,7 +431,7 @@ st.markdown(
         .data-badge {min-width:0;padding:6px 6px;}
         .data-badge .tiny {font-size:9px;}
         .data-badge .big {font-size:11px;}
-        .hero-card {min-height:300px;padding:15px;}
+        .hero-card {min-height:225px;padding:15px;}
         .hero-value {font-size:42px;}
         .hero-growth {font-size:29px;}
         .side-card,.flow-card {min-height:145px;padding:12px;}
@@ -421,7 +444,7 @@ st.markdown(
         .flow-value {font-size:17px;}
         .ytd-item {padding:9px 8px 2px;}
         .ytd-label {font-size:10px;}
-        .ytd-value {font-size:16px;}
+        .ytd-value {font-size:15px;white-space:nowrap;}
         .table-head, .bar-row {grid-template-columns: 2.05fr 2.7fr 1.45fr .6fr; gap:5px;}
         .product-head, .product-row {grid-template-columns: 1.8fr 2.5fr 1.25fr; gap:5px;}
         .account-head, .account-row {grid-template-columns: 1.3fr 2.6fr 1.3fr; gap:5px;}
@@ -706,18 +729,18 @@ def make_monthly_chart(direct_df, target_df, year, selected_month_num):
 
 def horizontal_rows(rows, value_key, amount_formatter, name_key="name"):
     maxv = max([float(r[value_key]) for r in rows] + [1])
-    html = ""
+    parts = []
     for i, r in enumerate(rows):
         pct = max(0, min(100, float(r[value_key]) / maxv * 100))
         cls = f"g{min(i+1,6)}" if i > 0 else ""
-        html += f"""
-        <div class="product-row">
-            <div class="bar-name">{r[name_key]}</div>
-            <div class="bar-track"><div class="bar-fill {cls}" style="width:{pct:.1f}%"></div></div>
-            <div class="bar-amount">{amount_formatter(r[value_key])} ({r.get('share',0):.0f}%)</div>
-        </div>
-        """
-    return html
+        parts.append(
+            f'<div class="product-row">'
+            f'<div class="bar-name">{r[name_key]}</div>'
+            f'<div class="bar-track"><div class="bar-fill {cls}" style="width:{pct:.1f}%"></div></div>'
+            f'<div class="bar-amount">{amount_formatter(r[value_key])} ({r.get("share",0):.0f}%)</div>'
+            f'</div>'
+        )
+    return "".join(parts)
 
 
 # =========================================================
@@ -999,13 +1022,23 @@ st.markdown(
 # SALES BY PRODUCT
 # =========================================================
 st.markdown('<div style="height:2px"></div>', unsafe_allow_html=True)
-product_mode = st.radio(
-    "Sales by Product metric",
-    ["By Value", "By Qty"],
-    horizontal=True,
-    label_visibility="collapsed",
-    key="product_mode",
-)
+
+if hasattr(st, "segmented_control"):
+    product_mode = st.segmented_control(
+        "Sales by Product metric",
+        options=["By Value", "By Qty"],
+        default="By Value",
+        label_visibility="collapsed",
+        key="product_mode",
+    )
+else:
+    product_mode = st.radio(
+        "Sales by Product metric",
+        ["By Value", "By Qty"],
+        horizontal=True,
+        label_visibility="collapsed",
+        key="product_mode",
+    )
 
 metric_col = "SALES VALUE" if product_mode == "By Value" else "SALES QUANTITY"
 prod = (
@@ -1015,49 +1048,68 @@ prod = (
     .head(5)
 )
 prod_total = float(direct_month[metric_col].sum())
+
 prod_rows = []
 for _, row in prod.iterrows():
-    name = PRODUCT_DISPLAY.get(row["SKU NAME"], row["SKU NAME"].title())
+    raw_name = str(row["SKU NAME"]).strip().upper()
+    name = PRODUCT_DISPLAY.get(raw_name, raw_name.title())
     val = float(row[metric_col])
-    prod_rows.append({"name": name, "value": val, "share": safe_pct(val, prod_total)})
+    prod_rows.append({
+        "name": name,
+        "value": val,
+        "share": safe_pct(val, prod_total)
+    })
 
 product_rows_html = horizontal_rows(
     prod_rows,
     "value",
     fmt_rp if product_mode == "By Value" else fmt_qty,
 )
-st.markdown(
-    f"""
-    <div class="card section-card" style="margin-top:4px">
-      <div class="section-title-row">
-        <div class="section-title">◇ &nbsp;Sales by Product</div>
-        <div class="period-label">{selected_month} {selected_year}</div>
-      </div>
-      {product_rows_html if product_rows_html else '<div class="muted">No data.</div>'}
-    </div>
-    """,
-    unsafe_allow_html=True,
+
+product_card_html = (
+    '<div class="card section-card" style="margin-top:4px">'
+    '<div class="section-title-row">'
+    '<div class="section-title">◇ &nbsp;Sales by Product</div>'
+    f'<div class="period-label">{selected_month} {selected_year}</div>'
+    '</div>'
+    + (product_rows_html if product_rows_html else '<div class="muted">No data.</div>')
+    + '</div>'
 )
+st.markdown(product_card_html, unsafe_allow_html=True)
 
 
 # =========================================================
 # ACCOUNT PERFORMANCE
 # =========================================================
-account_mode = st.radio(
-    "Account Performance metric",
-    ["Sales Amount", "Sales Quantity"],
-    horizontal=True,
-    label_visibility="collapsed",
-    key="account_mode",
-)
+if hasattr(st, "segmented_control"):
+    account_mode = st.segmented_control(
+        "Account Performance metric",
+        options=["Sales Amount", "Sales Quantity"],
+        default="Sales Amount",
+        label_visibility="collapsed",
+        key="account_mode",
+    )
+else:
+    account_mode = st.radio(
+        "Account Performance metric",
+        ["Sales Amount", "Sales Quantity"],
+        horizontal=True,
+        label_visibility="collapsed",
+        key="account_mode",
+    )
+
 acc_metric = "SALES VALUE" if account_mode == "Sales Amount" else "SALES QUANTITY"
 
 account_rows = []
 for key, display in ACCOUNT_FIXED:
     if key == "__MTI__":
-        val = float(account_month[account_month["ACCOUNT TYPE"].eq("MTI")][acc_metric].sum())
+        val = float(
+            account_month[account_month["ACCOUNT TYPE"].eq("MTI")][acc_metric].sum()
+        )
     else:
-        val = float(account_month[account_month["CUSTOMER CHAIN"].eq(key)][acc_metric].sum())
+        val = float(
+            account_month[account_month["CUSTOMER CHAIN"].eq(key)][acc_metric].sum()
+        )
     account_rows.append({"name": display, "value": val})
 
 acc_total = sum(r["value"] for r in account_rows)
@@ -1070,18 +1122,16 @@ account_rows_html = horizontal_rows(
     fmt_rp if account_mode == "Sales Amount" else fmt_qty,
 )
 
-st.markdown(
-    f"""
-    <div class="card section-card" style="margin-top:4px">
-      <div class="section-title-row">
-        <div class="section-title">▦ &nbsp;Account Performance</div>
-        <div class="period-label">{account_mode}</div>
-      </div>
-      {account_rows_html}
-    </div>
-    """,
-    unsafe_allow_html=True,
+account_card_html = (
+    '<div class="card section-card" style="margin-top:4px">'
+    '<div class="section-title-row">'
+    '<div class="section-title">▦ &nbsp;Account Performance</div>'
+    f'<div class="period-label">{account_mode}</div>'
+    '</div>'
+    + account_rows_html
+    + '</div>'
 )
+st.markdown(account_card_html, unsafe_allow_html=True)
 
 
 # =========================================================
@@ -1156,6 +1206,15 @@ with st.popover("🔐 Admin", use_container_width=False):
                     st.rerun()
     elif admin_password:
         st.error("Incorrect password.")
+
+st.markdown(
+    """
+    <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
+      BUILD V3 — 8 SEP 2026
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 st.markdown(
     """
