@@ -801,22 +801,17 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-f1, f2 = st.columns([1, 1], gap="small")
-with f1:
-    selected_month = st.selectbox(
-        "📅 Month",
-        available_months,
-        index=available_months.index(st.session_state["month_filter"]),
-        key="month_filter_select",
-    )
-    st.session_state["month_filter"] = selected_month
-with f2:
-    selected_account = st.selectbox(
-        "🏬 Account",
-        ["All Account", "Indomaret", "Alfamart", "Alfamidi", "Superindo", "MTI"],
-        index=0,
-        key="account_filter",
-    )
+selected_month = st.selectbox(
+    "📅 Month",
+    available_months,
+    index=available_months.index(st.session_state["month_filter"]),
+    key="month_filter_select",
+)
+st.session_state["month_filter"] = selected_month
+
+# Account filter intentionally removed from UI.
+# Dashboard always shows All Account at the global level.
+selected_account = "All Account"
 
 selected_month_num = MONTH_NUM[selected_month]
 
@@ -1210,7 +1205,7 @@ with st.popover("🔐 Admin", use_container_width=False):
 st.markdown(
     """
     <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
-      BUILD V3 — 8 SEP 2026
+      BUILD V4 — 8 SEP 2026
     </div>
     """,
     unsafe_allow_html=True,
