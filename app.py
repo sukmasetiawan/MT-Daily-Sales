@@ -420,257 +420,335 @@ st.markdown(
 
     @media (max-width: 720px) {
         .block-container {
-            max-width: 100%;
-            padding-left:10px;
-            padding-right:10px;
-            padding-top:8px;
-            padding-bottom:88px;
+            max-width: 390px !important;
+            width: 100% !important;
+            margin: 0 auto !important;
+            padding: 8px 10px 84px 10px !important;
         }
 
-        /* Header proportions follow the visual reference */
-        .headline-wrap {
-            grid-template-columns: 116px minmax(0,1fr) 96px;
-            gap:10px;
-            margin-bottom:10px;
-            align-items:center;
-        }
-        .brand-logo img {
-            max-width:116px;
-            max-height:58px;
-        }
-        .headline-copy {
-            padding-left:10px;
-        }
-        .headline-main {
-            font-size:18px;
-            line-height:1.0;
-            letter-spacing:.015em;
-        }
-        .headline-sub {
-            font-size:16px;
-            line-height:1.05;
-            margin-top:3px;
-        }
-        .data-badge {
-            min-width:0;
-            padding:6px 6px;
-            border-radius:9px;
-        }
-        .data-badge .tiny {font-size:8px;}
-        .data-badge .big {font-size:10px;}
-
-        /* Month filter = same visual width as MTD hero card */
-        div[data-testid="stSelectbox"] {
-            width:52.5% !important;
-            margin-bottom:8px !important;
-        }
-        div[data-testid="stSelectbox"] label {
-            font-size:12px !important;
-            margin-bottom:2px !important;
-        }
-        div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
-            min-height:42px !important;
-            border-radius:9px !important;
-        }
-
-        /* Keep the two-column KPI structure on mobile, like the reference */
-        .st-key-top_kpi [data-testid="stHorizontalBlock"] {
-            flex-wrap:nowrap !important;
-            gap:8px !important;
-            align-items:stretch !important;
-        }
-        .st-key-top_kpi [data-testid="stColumn"]:first-child {
-            flex:1.08 1 0 !important;
-            width:0 !important;
-            min-width:0 !important;
-        }
-        .st-key-top_kpi [data-testid="stColumn"]:last-child {
-            flex:1 1 0 !important;
-            width:0 !important;
-            min-width:0 !important;
-        }
-
-        .card {border-radius:10px;}
-        .hero-card {
-            min-height:314px;
-            height:314px;
-            padding:13px 12px;
-        }
-        .side-card {
-            min-height:150px;
-            height:150px;
-            padding:11px 10px;
-        }
-        .flow-card {
-            min-height:152px;
-            height:152px;
-            padding:11px 10px;
+        /* GLOBAL RHYTHM */
+        [data-testid="stVerticalBlock"] { gap: 0.50rem !important; }
+        .card {
+            border-radius: 11px !important;
         }
         .section-card {
-            padding:11px 12px;
-            margin-top:10px;
+            padding: 11px 12px !important;
+            margin-top: 10px !important;
         }
-        .section-title {font-size:14px;}
+
+        /* HEADER */
+        .headline-wrap {
+            grid-template-columns: 112px minmax(0,1fr) 96px !important;
+            gap: 9px !important;
+            margin-bottom: 9px !important;
+            align-items: center !important;
+        }
+        .brand-logo img {
+            width: 108px !important;
+            max-width: 108px !important;
+            max-height: 52px !important;
+        }
+        .headline-copy {
+            padding-left: 9px !important;
+        }
+        .headline-main {
+            font-size: 17px !important;
+            line-height: 1.00 !important;
+            font-weight: 800 !important;
+            letter-spacing: .01em !important;
+        }
+        .headline-sub {
+            font-size: 15px !important;
+            line-height: 1.05 !important;
+            margin-top: 3px !important;
+        }
+        .data-badge {
+            padding: 6px 6px !important;
+            border-radius: 9px !important;
+            min-width: 0 !important;
+        }
+        .data-badge .tiny { font-size: 8px !important; }
+        .data-badge .big  { font-size: 10px !important; }
+
+        /* MONTH FILTER */
+        div[data-testid="stSelectbox"] {
+            width: 51.5% !important;
+            margin: 0 0 7px 0 !important;
+        }
+        div[data-testid="stSelectbox"] label {
+            font-size: 11px !important;
+            margin-bottom: 1px !important;
+        }
+        div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+            min-height: 39px !important;
+            height: 39px !important;
+            font-size: 12px !important;
+            border-radius: 9px !important;
+        }
+
+        /* TOP KPI GRID */
+        .st-key-top_kpi [data-testid="stHorizontalBlock"] {
+            flex-wrap: nowrap !important;
+            gap: 8px !important;
+            align-items: stretch !important;
+        }
+        .st-key-top_kpi [data-testid="stColumn"]:first-child {
+            flex: 1.08 1 0 !important;
+            width: 0 !important;
+            min-width: 0 !important;
+        }
+        .st-key-top_kpi [data-testid="stColumn"]:last-child {
+            flex: 1 1 0 !important;
+            width: 0 !important;
+            min-width: 0 !important;
+        }
+
+        /* HERO MTD */
+        .hero-card {
+            height: 286px !important;
+            min-height: 286px !important;
+            padding: 13px 12px !important;
+        }
+        .section-title {
+            font-size: 14px !important;
+            line-height: 1.08 !important;
+            font-weight: 750 !important;
+        }
         .date-line {
-            font-size:9px;
-            margin-top:3px;
-            white-space:nowrap;
+            font-size: 8.5px !important;
+            line-height: 1.1 !important;
+            margin-top: 4px !important;
+            white-space: nowrap !important;
         }
         .hero-value {
-            font-size:31px;
-            margin:24px 0 10px;
-            letter-spacing:-.02em;
+            font-size: 31px !important;
+            line-height: 1.0 !important;
+            margin: 27px 0 11px !important;
         }
         .hero-growth {
-            font-size:23px;
-            gap:7px;
+            font-size: 22px !important;
+            gap: 7px !important;
         }
         .hero-growth span.note {
-            font-size:9px;
-            line-height:1.15;
+            font-size: 8.5px !important;
+            line-height: 1.15 !important;
         }
         .sparkline-wrap {
-            margin-top:18px;
-            height:86px;
+            margin-top: 15px !important;
+            height: 78px !important;
         }
 
+        /* ACHIEVEMENT + FLOW */
+        .side-card {
+            height: 137px !important;
+            min-height: 137px !important;
+            padding: 10px 9px !important;
+        }
+        .flow-card {
+            height: 141px !important;
+            min-height: 141px !important;
+            padding: 10px 9px !important;
+        }
         .kpi-big {
-            font-size:28px;
-            margin:6px 0 3px;
+            font-size: 27px !important;
+            margin: 5px 0 2px !important;
         }
         .achievement-gap {
-            font-size:11px !important;
+            font-size: 10px !important;
+            white-space: nowrap !important;
         }
         .kpi-grid3 {
-            margin-top:5px;
-            border-radius:7px;
+            margin-top: 4px !important;
+            border-radius: 7px !important;
         }
-        .kpi-cell,.flow-cell {padding:6px 5px;}
-        .kpi-label,.flow-title {font-size:8px;}
-        .kpi-value {font-size:10px;}
-        .flow-value {font-size:13px;}
+        .kpi-cell, .flow-cell {
+            padding: 5px 4px !important;
+        }
+        .kpi-label, .flow-title {
+            font-size: 7.5px !important;
+            line-height: 1.1 !important;
+        }
+        .kpi-value {
+            font-size: 9.5px !important;
+            line-height: 1.1 !important;
+        }
+        .flow-value {
+            font-size: 12.5px !important;
+            line-height: 1.05 !important;
+        }
         .flow-share {
-            font-size:11px;
-            margin-top:4px;
+            font-size: 10px !important;
+            margin-top: 3px !important;
         }
         .mini-bar {
-            height:6px;
-            margin-top:4px;
+            height: 5px !important;
+            margin-top: 3px !important;
         }
 
-        /* Compact YTD like the reference */
-        .ytd-card {padding:9px 10px;}
-        .section-title-row {margin-bottom:5px;}
-        .period-label {font-size:9px;}
-        .ytd-metrics {margin-top:4px;}
-        .ytd-item {padding:7px 6px 1px;}
-        .ytd-label {font-size:8px;}
-        .ytd-value {font-size:12px;white-space:nowrap;}
+        /* YTD */
+        .ytd-card {
+            padding: 9px 10px !important;
+            min-height: 92px !important;
+        }
+        .section-title-row {
+            margin-bottom: 4px !important;
+        }
+        .period-label {
+            font-size: 8.5px !important;
+            line-height: 1.1 !important;
+        }
+        .ytd-metrics {
+            margin-top: 3px !important;
+        }
+        .ytd-item {
+            padding: 6px 6px 1px !important;
+        }
+        .ytd-label {
+            font-size: 7.5px !important;
+        }
+        .ytd-value {
+            font-size: 11.5px !important;
+            white-space: nowrap !important;
+        }
 
-        /* One cohesive card for chart */
+        /* MONTHLY SALES TREND */
         .st-key-monthly_trend_card {
-            border:1px solid var(--stroke);
-            border-radius:10px;
-            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98));
-            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05);
-            padding:10px 10px 4px !important;
-            margin-top:10px;
+            border: 1px solid var(--stroke) !important;
+            border-radius: 11px !important;
+            background: linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
+            box-shadow: inset 0 0 26px rgba(14,115,190,.08), 0 0 18px rgba(0,168,255,.05) !important;
+            padding: 10px 10px 5px !important;
+            margin-top: 10px !important;
         }
         .st-key-monthly_trend_card [data-testid="stVerticalBlock"] {
-            gap:0 !important;
+            gap: 0 !important;
         }
         .st-key-monthly_trend_card [data-testid="stPlotlyChart"] {
-            margin-top:-4px !important;
+            margin-top: -3px !important;
         }
 
-        /* Customer / product / account cards */
+        /* CUSTOMER */
         .table-head, .bar-row {
-            grid-template-columns: 2.05fr 2.65fr 1.42fr .55fr;
-            gap:4px;
+            grid-template-columns: 2.05fr 2.65fr 1.38fr .52fr !important;
+            gap: 4px !important;
         }
-        .bar-row {min-height:24px;font-size:9px;}
-        .table-head {font-size:8px;}
-        .bar-track {height:10px;}
-        .bar-name,.bar-amount,.bar-share {font-size:9px;}
+        .table-head {
+            font-size: 7.5px !important;
+            padding-bottom: 4px !important;
+            margin-bottom: 4px !important;
+        }
+        .bar-row {
+            min-height: 23px !important;
+            font-size: 8.5px !important;
+        }
+        .bar-name, .bar-amount, .bar-share {
+            font-size: 8.5px !important;
+        }
+        .bar-track {
+            height: 9px !important;
+        }
 
+        /* PRODUCT / ACCOUNT WRAPPER CARDS */
         .st-key-product_card,
         .st-key-account_card {
-            border:1px solid var(--stroke);
-            border-radius:10px;
-            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98));
-            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05);
-            padding:10px 10px 9px !important;
-            margin-top:10px;
+            border: 1px solid var(--stroke) !important;
+            border-radius: 11px !important;
+            background: linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
+            box-shadow: inset 0 0 26px rgba(14,115,190,.08), 0 0 18px rgba(0,168,255,.05) !important;
+            padding: 10px 10px 9px !important;
+            margin-top: 10px !important;
         }
         .st-key-product_card [data-testid="stVerticalBlock"],
         .st-key-account_card [data-testid="stVerticalBlock"] {
-            gap:3px !important;
-        }
-        .st-key-product_header [data-testid="stHorizontalBlock"],
-        .st-key-account_header [data-testid="stHorizontalBlock"] {
-            flex-wrap:nowrap !important;
-            gap:5px !important;
-            align-items:center !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(1),
-        .st-key-account_header [data-testid="stColumn"]:nth-child(1) {
-            flex:2.4 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(2),
-        .st-key-account_header [data-testid="stColumn"]:nth-child(2) {
-            flex:1.65 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(3),
-        .st-key-account_header [data-testid="stColumn"]:nth-child(3) {
-            flex:.75 1 0 !important; width:0 !important; min-width:0 !important;
+            gap: 2px !important;
         }
 
-        .product-row,.account-row {
-            min-height:25px;
-            font-size:9px;
+        /* product header = title | toggle | month */
+        .st-key-product_header [data-testid="stHorizontalBlock"] {
+            flex-wrap: nowrap !important;
+            gap: 4px !important;
+            align-items: center !important;
         }
-        .product-row {
-            grid-template-columns:1.75fr 2.55fr 1.4fr;
-            gap:4px;
+        .st-key-product_header [data-testid="stColumn"]:nth-child(1) {
+            flex: 1.55 1 0 !important; width:0 !important; min-width:0 !important;
         }
-        .account-row {
-            grid-template-columns:1.45fr 2.65fr 1.45fr;
-            gap:4px;
+        .st-key-product_header [data-testid="stColumn"]:nth-child(2) {
+            flex: 1.45 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+        .st-key-product_header [data-testid="stColumn"]:nth-child(3) {
+            flex: .60 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+
+        /* account header = title | toggle | month */
+        .st-key-account_header [data-testid="stHorizontalBlock"] {
+            flex-wrap: nowrap !important;
+            gap: 4px !important;
+            align-items: center !important;
+        }
+        .st-key-account_header [data-testid="stColumn"]:nth-child(1) {
+            flex: 1.45 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+        .st-key-account_header [data-testid="stColumn"]:nth-child(2) {
+            flex: 1.60 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+        .st-key-account_header [data-testid="stColumn"]:nth-child(3) {
+            flex: .55 1 0 !important; width:0 !important; min-width:0 !important;
         }
 
         div[data-testid="stSegmentedControl"] {
-            margin:0 !important;
+            margin: 0 !important;
         }
         div[data-testid="stSegmentedControl"] > div {
-            justify-content:flex-end !important;
-            gap:0 !important;
+            justify-content: flex-end !important;
+            gap: 0 !important;
         }
         div[data-testid="stSegmentedControl"] button {
-            min-height:27px !important;
-            height:27px !important;
-            padding:3px 8px !important;
-            font-size:8px !important;
-            border-radius:5px !important;
+            min-height: 25px !important;
+            height: 25px !important;
+            padding: 2px 7px !important;
+            font-size: 7.5px !important;
+            line-height: 1 !important;
+            border-radius: 5px !important;
         }
 
+        .product-row {
+            grid-template-columns: 1.78fr 2.50fr 1.42fr !important;
+            gap: 4px !important;
+            min-height: 24px !important;
+            font-size: 8.5px !important;
+        }
+        .account-row {
+            grid-template-columns: 1.45fr 2.65fr 1.45fr !important;
+            gap: 4px !important;
+            min-height: 24px !important;
+            font-size: 8.5px !important;
+        }
+
+        /* INSIGHTS */
         .insight-grid {
-            grid-template-columns:repeat(4,1fr);
-            gap:5px;
+            grid-template-columns: repeat(4,1fr) !important;
+            gap: 5px !important;
+            margin-top: 8px !important;
         }
         .insight {
-            min-height:76px;
-            padding:7px;
-            gap:5px;
-            font-size:8px;
-            line-height:1.22;
+            min-height: 88px !important;
+            padding: 7px 6px !important;
+            gap: 4px !important;
+            font-size: 7.5px !important;
+            line-height: 1.22 !important;
         }
         .insight-no {
-            width:22px;height:22px;min-width:22px;
-            font-size:10px;
+            width: 21px !important;
+            height: 21px !important;
+            min-width: 21px !important;
+            font-size: 9px !important;
         }
 
-        /* Reduce Streamlit default vertical gaps */
-        [data-testid="stVerticalBlock"] {gap:0.45rem;}
+        /* ADMIN / FOOTER */
+        [data-testid="stPopover"] button {
+            min-height: 34px !important;
+            font-size: 11px !important;
+        }
     }
     </style>
     """,
@@ -954,14 +1032,14 @@ def make_monthly_chart(direct_df, target_df, year, selected_month_num):
         hovertemplate="%{x}<br>Target: Rp %{y:,.0f}<extra></extra>",
     ))
     fig.update_layout(
-        height=250,
+        height=275,
         margin=dict(l=2, r=2, t=3, b=1),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#d8e8f5", size=11),
         legend=dict(
             orientation="h", yanchor="bottom", y=1.01, xanchor="right", x=1,
-            bgcolor="rgba(0,0,0,0)"
+            bgcolor="rgba(0,0,0,0)", font=dict(size=10)
         ),
         bargap=.45,
         xaxis=dict(showgrid=False, zeroline=False),
@@ -1253,7 +1331,7 @@ st.markdown(
     f"""
     <div class="card section-card">
       <div class="section-title-row">
-        <div class="section-title">▦ &nbsp;Sales by Customer <span style="font-size:14px;font-weight:400">(Direct Channel)</span></div>
+        <div class="section-title" style="font-size:13px">▦ &nbsp;Sales by Customer <span style="font-size:9px;font-weight:400">(Direct Channel)</span></div>
         <div class="period-label">{selected_month} {selected_year}</div>
       </div>
       <div class="table-head">
@@ -1273,7 +1351,7 @@ with st.container(key="product_card"):
     with st.container(key="product_header"):
         ph1, ph2, ph3 = st.columns([2.4, 1.65, .75], gap="small")
         with ph1:
-            st.markdown('<div class="section-title">◇ &nbsp;Sales by Product</div>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title" style="font-size:13px">◇ &nbsp;Sales by Product</div>', unsafe_allow_html=True)
         with ph2:
             if hasattr(st, "segmented_control"):
                 product_mode = st.segmented_control(
@@ -1324,7 +1402,7 @@ with st.container(key="account_card"):
     with st.container(key="account_header"):
         ah1, ah2, ah3 = st.columns([2.4, 1.65, .75], gap="small")
         with ah1:
-            st.markdown('<div class="section-title">▦ &nbsp;Account Performance</div>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title" style="font-size:13px">▦ &nbsp;Account Performance</div>', unsafe_allow_html=True)
         with ah2:
             if hasattr(st, "segmented_control"):
                 account_mode = st.segmented_control(
@@ -1442,7 +1520,7 @@ with st.popover("🔐 Admin", use_container_width=False):
 st.markdown(
     """
     <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
-      BUILD V5 — 9 SEP 2026
+      BUILD V6 — 9 SEP 2026
     </div>
     """,
     unsafe_allow_html=True,
