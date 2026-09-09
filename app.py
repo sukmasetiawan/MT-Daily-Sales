@@ -63,6 +63,7 @@ PRODUCT_DISPLAY = {
 
 # =========================================================
 # STYLE
+# Mobile layout tuned to match the approved visual reference.
 # =========================================================
 st.markdown(
     """
@@ -418,40 +419,258 @@ st.markdown(
     .divider-space {height:16px;}
 
     @media (max-width: 720px) {
-        .block-container {padding-left:10px;padding-right:10px;padding-top:8px;}
-        .headline-wrap {
-            grid-template-columns: 105px 1fr 90px;
-            gap:9px;
-            margin-bottom:10px;
+        .block-container {
+            max-width: 100%;
+            padding-left:10px;
+            padding-right:10px;
+            padding-top:8px;
+            padding-bottom:88px;
         }
-        .brand-logo img {max-width:105px;max-height:54px;}
-        .headline-copy {padding-left:9px;}
-        .headline-main {font-size:18px;}
-        .headline-sub {font-size:17px;}
-        .data-badge {min-width:0;padding:6px 6px;}
-        .data-badge .tiny {font-size:9px;}
-        .data-badge .big {font-size:11px;}
-        .hero-card {min-height:225px;padding:15px;}
-        .hero-value {font-size:42px;}
-        .hero-growth {font-size:29px;}
-        .side-card,.flow-card {min-height:145px;padding:12px;}
-        .section-title {font-size:17px;}
-        .kpi-big {font-size:33px;}
-        .kpi-grid3 {margin-top:8px;}
-        .kpi-cell,.flow-cell {padding:8px;}
-        .kpi-label,.flow-title {font-size:10px;}
-        .kpi-value {font-size:14px;}
-        .flow-value {font-size:17px;}
-        .ytd-item {padding:9px 8px 2px;}
-        .ytd-label {font-size:10px;}
-        .ytd-value {font-size:15px;white-space:nowrap;}
-        .table-head, .bar-row {grid-template-columns: 2.05fr 2.7fr 1.45fr .6fr; gap:5px;}
-        .product-head, .product-row {grid-template-columns: 1.8fr 2.5fr 1.25fr; gap:5px;}
-        .account-head, .account-row {grid-template-columns: 1.3fr 2.6fr 1.3fr; gap:5px;}
-        .bar-row,.product-row,.account-row {font-size:11px;}
-        .bar-track {height:12px;}
-        .insight-grid {grid-template-columns:repeat(2,1fr);}
-        .insight {min-height:78px;font-size:11px;}
+
+        /* Header proportions follow the visual reference */
+        .headline-wrap {
+            grid-template-columns: 116px minmax(0,1fr) 96px;
+            gap:10px;
+            margin-bottom:10px;
+            align-items:center;
+        }
+        .brand-logo img {
+            max-width:116px;
+            max-height:58px;
+        }
+        .headline-copy {
+            padding-left:10px;
+        }
+        .headline-main {
+            font-size:18px;
+            line-height:1.0;
+            letter-spacing:.015em;
+        }
+        .headline-sub {
+            font-size:16px;
+            line-height:1.05;
+            margin-top:3px;
+        }
+        .data-badge {
+            min-width:0;
+            padding:6px 6px;
+            border-radius:9px;
+        }
+        .data-badge .tiny {font-size:8px;}
+        .data-badge .big {font-size:10px;}
+
+        /* Month filter = same visual width as MTD hero card */
+        div[data-testid="stSelectbox"] {
+            width:52.5% !important;
+            margin-bottom:8px !important;
+        }
+        div[data-testid="stSelectbox"] label {
+            font-size:12px !important;
+            margin-bottom:2px !important;
+        }
+        div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+            min-height:42px !important;
+            border-radius:9px !important;
+        }
+
+        /* Keep the two-column KPI structure on mobile, like the reference */
+        .st-key-top_kpi [data-testid="stHorizontalBlock"] {
+            flex-wrap:nowrap !important;
+            gap:8px !important;
+            align-items:stretch !important;
+        }
+        .st-key-top_kpi [data-testid="stColumn"]:first-child {
+            flex:1.08 1 0 !important;
+            width:0 !important;
+            min-width:0 !important;
+        }
+        .st-key-top_kpi [data-testid="stColumn"]:last-child {
+            flex:1 1 0 !important;
+            width:0 !important;
+            min-width:0 !important;
+        }
+
+        .card {border-radius:10px;}
+        .hero-card {
+            min-height:314px;
+            height:314px;
+            padding:13px 12px;
+        }
+        .side-card {
+            min-height:150px;
+            height:150px;
+            padding:11px 10px;
+        }
+        .flow-card {
+            min-height:152px;
+            height:152px;
+            padding:11px 10px;
+        }
+        .section-card {
+            padding:11px 12px;
+            margin-top:10px;
+        }
+        .section-title {font-size:14px;}
+        .date-line {
+            font-size:9px;
+            margin-top:3px;
+            white-space:nowrap;
+        }
+        .hero-value {
+            font-size:31px;
+            margin:24px 0 10px;
+            letter-spacing:-.02em;
+        }
+        .hero-growth {
+            font-size:23px;
+            gap:7px;
+        }
+        .hero-growth span.note {
+            font-size:9px;
+            line-height:1.15;
+        }
+        .sparkline-wrap {
+            margin-top:18px;
+            height:86px;
+        }
+
+        .kpi-big {
+            font-size:28px;
+            margin:6px 0 3px;
+        }
+        .achievement-gap {
+            font-size:11px !important;
+        }
+        .kpi-grid3 {
+            margin-top:5px;
+            border-radius:7px;
+        }
+        .kpi-cell,.flow-cell {padding:6px 5px;}
+        .kpi-label,.flow-title {font-size:8px;}
+        .kpi-value {font-size:10px;}
+        .flow-value {font-size:13px;}
+        .flow-share {
+            font-size:11px;
+            margin-top:4px;
+        }
+        .mini-bar {
+            height:6px;
+            margin-top:4px;
+        }
+
+        /* Compact YTD like the reference */
+        .ytd-card {padding:9px 10px;}
+        .section-title-row {margin-bottom:5px;}
+        .period-label {font-size:9px;}
+        .ytd-metrics {margin-top:4px;}
+        .ytd-item {padding:7px 6px 1px;}
+        .ytd-label {font-size:8px;}
+        .ytd-value {font-size:12px;white-space:nowrap;}
+
+        /* One cohesive card for chart */
+        .st-key-monthly_trend_card {
+            border:1px solid var(--stroke);
+            border-radius:10px;
+            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98));
+            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05);
+            padding:10px 10px 4px !important;
+            margin-top:10px;
+        }
+        .st-key-monthly_trend_card [data-testid="stVerticalBlock"] {
+            gap:0 !important;
+        }
+        .st-key-monthly_trend_card [data-testid="stPlotlyChart"] {
+            margin-top:-4px !important;
+        }
+
+        /* Customer / product / account cards */
+        .table-head, .bar-row {
+            grid-template-columns: 2.05fr 2.65fr 1.42fr .55fr;
+            gap:4px;
+        }
+        .bar-row {min-height:24px;font-size:9px;}
+        .table-head {font-size:8px;}
+        .bar-track {height:10px;}
+        .bar-name,.bar-amount,.bar-share {font-size:9px;}
+
+        .st-key-product_card,
+        .st-key-account_card {
+            border:1px solid var(--stroke);
+            border-radius:10px;
+            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98));
+            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05);
+            padding:10px 10px 9px !important;
+            margin-top:10px;
+        }
+        .st-key-product_card [data-testid="stVerticalBlock"],
+        .st-key-account_card [data-testid="stVerticalBlock"] {
+            gap:3px !important;
+        }
+        .st-key-product_header [data-testid="stHorizontalBlock"],
+        .st-key-account_header [data-testid="stHorizontalBlock"] {
+            flex-wrap:nowrap !important;
+            gap:5px !important;
+            align-items:center !important;
+        }
+        .st-key-product_header [data-testid="stColumn"]:nth-child(1),
+        .st-key-account_header [data-testid="stColumn"]:nth-child(1) {
+            flex:2.4 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+        .st-key-product_header [data-testid="stColumn"]:nth-child(2),
+        .st-key-account_header [data-testid="stColumn"]:nth-child(2) {
+            flex:1.65 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+        .st-key-product_header [data-testid="stColumn"]:nth-child(3),
+        .st-key-account_header [data-testid="stColumn"]:nth-child(3) {
+            flex:.75 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+
+        .product-row,.account-row {
+            min-height:25px;
+            font-size:9px;
+        }
+        .product-row {
+            grid-template-columns:1.75fr 2.55fr 1.4fr;
+            gap:4px;
+        }
+        .account-row {
+            grid-template-columns:1.45fr 2.65fr 1.45fr;
+            gap:4px;
+        }
+
+        div[data-testid="stSegmentedControl"] {
+            margin:0 !important;
+        }
+        div[data-testid="stSegmentedControl"] > div {
+            justify-content:flex-end !important;
+            gap:0 !important;
+        }
+        div[data-testid="stSegmentedControl"] button {
+            min-height:27px !important;
+            height:27px !important;
+            padding:3px 8px !important;
+            font-size:8px !important;
+            border-radius:5px !important;
+        }
+
+        .insight-grid {
+            grid-template-columns:repeat(4,1fr);
+            gap:5px;
+        }
+        .insight {
+            min-height:76px;
+            padding:7px;
+            gap:5px;
+            font-size:8px;
+            line-height:1.22;
+        }
+        .insight-no {
+            width:22px;height:22px;min-width:22px;
+            font-size:10px;
+        }
+
+        /* Reduce Streamlit default vertical gaps */
+        [data-testid="stVerticalBlock"] {gap:0.45rem;}
     }
     </style>
     """,
@@ -499,6 +718,36 @@ def read_logo_b64():
         return ""
     return base64.b64encode(LOGO_PATH.read_bytes()).decode("utf-8")
 
+
+
+def sparkline_svg(series, width=310, height=82):
+    vals = [float(v) for v in series if pd.notna(v)]
+    if not vals:
+        vals = [0, 0]
+    if len(vals) == 1:
+        vals = [0, vals[0]]
+    lo, hi = min(vals), max(vals)
+    span = hi - lo if hi != lo else 1.0
+    pad_x, pad_y = 4, 7
+    pts = []
+    for i, v in enumerate(vals):
+        x = pad_x + (width - pad_x*2) * i / max(1, len(vals)-1)
+        y = height - pad_y - (height - pad_y*2) * (v-lo) / span
+        pts.append((x,y))
+    path = " ".join(f"{x:.1f},{y:.1f}" for x,y in pts)
+    lastx,lasty = pts[-1]
+    return (
+        f'<svg viewBox="0 0 {width} {height}" width="100%" height="100%" preserveAspectRatio="none">'
+        f'<defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0%" stop-color="#168cff" stop-opacity=".32"/>'
+        f'<stop offset="100%" stop-color="#168cff" stop-opacity="0"/>'
+        f'</linearGradient></defs>'
+        f'<polygon points="{pad_x},{height-pad_y} {path} {lastx:.1f},{height-pad_y}" fill="url(#sparkFill)"/>'
+        f'<polyline points="{path}" fill="none" stroke="#1bc7ff" stroke-width="3" '
+        f'stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<circle cx="{lastx:.1f}" cy="{lasty:.1f}" r="4" fill="#21dbff"/>'
+        f'</svg>'
+    )
 
 def normalise_sales(df):
     df = df.copy()
@@ -705,8 +954,8 @@ def make_monthly_chart(direct_df, target_df, year, selected_month_num):
         hovertemplate="%{x}<br>Target: Rp %{y:,.0f}<extra></extra>",
     ))
     fig.update_layout(
-        height=310,
-        margin=dict(l=8, r=8, t=10, b=4),
+        height=250,
+        margin=dict(l=2, r=2, t=3, b=1),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#d8e8f5", size=11),
@@ -869,71 +1118,81 @@ ytd_ach = safe_pct(ytd_actual, ytd_target)
 # =========================================================
 # TOP KPI AREA
 # =========================================================
-left, right = st.columns([1.08, 1], gap="small")
+growth_arrow = "▲" if growth >= 0 else "▼"
+growth_color = "#23e6b1" if growth >= 0 else "#ff575f"
+gap_pct = safe_pct(mtd_gap, mtd_target)
 
-with left:
-    growth_arrow = "▲" if growth >= 0 else "▼"
-    growth_color = "#23e6b1" if growth >= 0 else "#ff575f"
-    st.markdown(
-        f"""
-        <div class="card hero-card">
-          <div class="section-title">Sales – Month to Date</div>
-          <div class="date-line">1 – {month_max_day} {selected_month} {selected_year}
-            &nbsp; | &nbsp; vs 1 – {prev_end_day} {prev_month_label} {prev_year}</div>
-          <div class="hero-value">{fmt_rp(mtd_actual)}</div>
-          <div class="hero-growth" style="color:{growth_color}">
-            {growth_arrow} {growth:+.1f}%
-            <span class="note">vs same period<br>last month</span>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+daily_mtd = (
+    cur_direct_same.groupby("DATE")["SALES VALUE"].sum()
+    .reindex(range(1, month_max_day + 1), fill_value=0)
+)
+daily_cum = daily_mtd.cumsum().tolist()
+spark_svg = sparkline_svg(daily_cum)
 
-with right:
-    gap_pct = safe_pct(mtd_gap, mtd_target)
-    st.markdown(
-        f"""
-        <div class="card side-card">
-          <div class="section-title">🎯 &nbsp;Achievement</div>
-          <div style="display:flex;align-items:center;justify-content:center;gap:20px">
-            <div class="kpi-big">{mtd_ach:.0f}%</div>
-            <div style="font-size:16px;color:{'#23e6b1' if mtd_gap>=0 else '#ff6a70'}">
-              {'▲' if mtd_gap>=0 else '▼'} {gap_pct:+.1f}% (Gap)
+with st.container(key="top_kpi"):
+    left, right = st.columns([1.08, 1], gap="small")
+
+    with left:
+        st.markdown(
+            f"""
+            <div class="card hero-card">
+              <div class="section-title">Sales – Month to Date</div>
+              <div class="date-line">1 – {month_max_day} {selected_month} {selected_year}
+                &nbsp; | &nbsp; vs 1 – {prev_end_day} {prev_month_label} {prev_year}</div>
+              <div class="hero-value">{fmt_rp(mtd_actual)}</div>
+              <div class="hero-growth" style="color:{growth_color}">
+                {growth_arrow} {growth:+.1f}%
+                <span class="note">vs same period<br>last month</span>
+              </div>
+              <div class="sparkline-wrap">{spark_svg}</div>
             </div>
-          </div>
-          <div class="kpi-grid3">
-            <div class="kpi-cell"><div class="kpi-label">Actual MTD</div><div class="kpi-value">{fmt_rp(mtd_actual)}</div></div>
-            <div class="kpi-cell"><div class="kpi-label">Target MTD</div><div class="kpi-value">{fmt_rp(mtd_target)}</div></div>
-            <div class="kpi-cell"><div class="kpi-label">Gap</div><div class="kpi-value {'green' if mtd_gap>=0 else 'red'}">{fmt_rp(mtd_gap)}</div></div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.markdown('<div style="height:14px"></div>', unsafe_allow_html=True)
-    st.markdown(
-        f"""
-        <div class="card flow-card">
-          <div class="section-title">⇄ &nbsp;Sales Flow Breakdown</div>
-          <div class="flow-grid">
-            <div class="flow-cell">
-              <div class="flow-title">Sales to Distributor</div>
-              <div class="flow-value">{fmt_rp(sales_to_dist)}</div>
-              <div class="flow-share">{share_dist:.0f}%</div>
-              <div class="mini-bar"><div class="mini-fill-blue" style="width:{share_dist:.1f}%"></div></div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with right:
+        st.markdown(
+            f"""
+            <div class="card side-card">
+              <div class="section-title">🎯 &nbsp;Achievement</div>
+              <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+                <div class="kpi-big">{mtd_ach:.0f}%</div>
+                <div class="achievement-gap" style="font-size:16px;color:{'#23e6b1' if mtd_gap>=0 else '#ff6a70'}">
+                  {'▲' if mtd_gap>=0 else '▼'} {gap_pct:+.1f}% (Gap)
+                </div>
+              </div>
+              <div class="kpi-grid3">
+                <div class="kpi-cell"><div class="kpi-label">Actual MTD</div><div class="kpi-value">{fmt_rp(mtd_actual)}</div></div>
+                <div class="kpi-cell"><div class="kpi-label">Target MTD</div><div class="kpi-value">{fmt_rp(mtd_target)}</div></div>
+                <div class="kpi-cell"><div class="kpi-label">Gap</div><div class="kpi-value {'green' if mtd_gap>=0 else 'red'}">{fmt_rp(mtd_gap)}</div></div>
+              </div>
             </div>
-            <div class="flow-cell">
-              <div class="flow-title">Sales to Stores</div>
-              <div class="flow-value">{fmt_rp(sales_to_store)}</div>
-              <div class="flow-share">{share_store:.0f}%</div>
-              <div class="mini-bar"><div class="mini-fill-green" style="width:{share_store:.1f}%"></div></div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown('<div style="height:8px"></div>', unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="card flow-card">
+              <div class="section-title">⇄ &nbsp;Sales Flow Breakdown</div>
+              <div class="flow-grid">
+                <div class="flow-cell">
+                  <div class="flow-title">Sales to Distributor</div>
+                  <div class="flow-value">{fmt_rp(sales_to_dist)}</div>
+                  <div class="flow-share">{share_dist:.0f}%</div>
+                  <div class="mini-bar"><div class="mini-fill-blue" style="width:{share_dist:.1f}%"></div></div>
+                </div>
+                <div class="flow-cell">
+                  <div class="flow-title">Sales to Stores</div>
+                  <div class="flow-value">{fmt_rp(sales_to_store)}</div>
+                  <div class="flow-share">{share_store:.0f}%</div>
+                  <div class="mini-bar"><div class="mini-fill-green" style="width:{share_store:.1f}%"></div></div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
 
 
 # =========================================================
@@ -961,16 +1220,10 @@ st.markdown(
 # =========================================================
 # MONTHLY SALES TREND
 # =========================================================
-st.markdown(
-    """
-    <div class="card section-card" style="padding-bottom:2px">
-      <div class="section-title">↗ &nbsp;Monthly Sales Trend</div>
-    """,
-    unsafe_allow_html=True,
-)
-fig = make_monthly_chart(direct_all, target_df, selected_year, selected_month_num)
-st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-st.markdown("</div>", unsafe_allow_html=True)
+with st.container(key="monthly_trend_card"):
+    st.markdown('<div class="section-title">↗ &nbsp;Monthly Sales Trend</div>', unsafe_allow_html=True)
+    fig = make_monthly_chart(direct_all, target_df, selected_year, selected_month_num)
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
 # =========================================================
@@ -1016,117 +1269,101 @@ st.markdown(
 # =========================================================
 # SALES BY PRODUCT
 # =========================================================
-st.markdown('<div style="height:2px"></div>', unsafe_allow_html=True)
+with st.container(key="product_card"):
+    with st.container(key="product_header"):
+        ph1, ph2, ph3 = st.columns([2.4, 1.65, .75], gap="small")
+        with ph1:
+            st.markdown('<div class="section-title">◇ &nbsp;Sales by Product</div>', unsafe_allow_html=True)
+        with ph2:
+            if hasattr(st, "segmented_control"):
+                product_mode = st.segmented_control(
+                    "Sales by Product metric",
+                    options=["By Value", "By Qty"],
+                    default="By Value",
+                    label_visibility="collapsed",
+                    key="product_mode",
+                )
+            else:
+                product_mode = st.radio(
+                    "Sales by Product metric",
+                    ["By Value", "By Qty"],
+                    horizontal=True,
+                    label_visibility="collapsed",
+                    key="product_mode",
+                )
+        with ph3:
+            st.markdown(f'<div class="period-label" style="text-align:right;padding-top:6px">{selected_month} {selected_year}</div>', unsafe_allow_html=True)
 
-if hasattr(st, "segmented_control"):
-    product_mode = st.segmented_control(
-        "Sales by Product metric",
-        options=["By Value", "By Qty"],
-        default="By Value",
-        label_visibility="collapsed",
-        key="product_mode",
+    metric_col = "SALES VALUE" if product_mode == "By Value" else "SALES QUANTITY"
+    prod = (
+        direct_month.groupby("SKU NAME", as_index=False)[metric_col]
+        .sum()
+        .sort_values(metric_col, ascending=False)
+        .head(5)
     )
-else:
-    product_mode = st.radio(
-        "Sales by Product metric",
-        ["By Value", "By Qty"],
-        horizontal=True,
-        label_visibility="collapsed",
-        key="product_mode",
+    prod_total = float(direct_month[metric_col].sum())
+    prod_rows = []
+    for _, row in prod.iterrows():
+        raw_name = str(row["SKU NAME"]).strip().upper()
+        name = PRODUCT_DISPLAY.get(raw_name, raw_name.title())
+        val = float(row[metric_col])
+        prod_rows.append({"name": name, "value": val, "share": safe_pct(val, prod_total)})
+
+    product_rows_html = horizontal_rows(
+        prod_rows,
+        "value",
+        fmt_rp if product_mode == "By Value" else fmt_qty,
     )
-
-metric_col = "SALES VALUE" if product_mode == "By Value" else "SALES QUANTITY"
-prod = (
-    direct_month.groupby("SKU NAME", as_index=False)[metric_col]
-    .sum()
-    .sort_values(metric_col, ascending=False)
-    .head(5)
-)
-prod_total = float(direct_month[metric_col].sum())
-
-prod_rows = []
-for _, row in prod.iterrows():
-    raw_name = str(row["SKU NAME"]).strip().upper()
-    name = PRODUCT_DISPLAY.get(raw_name, raw_name.title())
-    val = float(row[metric_col])
-    prod_rows.append({
-        "name": name,
-        "value": val,
-        "share": safe_pct(val, prod_total)
-    })
-
-product_rows_html = horizontal_rows(
-    prod_rows,
-    "value",
-    fmt_rp if product_mode == "By Value" else fmt_qty,
-)
-
-product_card_html = (
-    '<div class="card section-card" style="margin-top:4px">'
-    '<div class="section-title-row">'
-    '<div class="section-title">◇ &nbsp;Sales by Product</div>'
-    f'<div class="period-label">{selected_month} {selected_year}</div>'
-    '</div>'
-    + (product_rows_html if product_rows_html else '<div class="muted">No data.</div>')
-    + '</div>'
-)
-st.markdown(product_card_html, unsafe_allow_html=True)
+    st.markdown(product_rows_html if product_rows_html else '<div class="muted">No data.</div>', unsafe_allow_html=True)
 
 
 # =========================================================
 # ACCOUNT PERFORMANCE
 # =========================================================
-if hasattr(st, "segmented_control"):
-    account_mode = st.segmented_control(
-        "Account Performance metric",
-        options=["Sales Amount", "Sales Quantity"],
-        default="Sales Amount",
-        label_visibility="collapsed",
-        key="account_mode",
+with st.container(key="account_card"):
+    with st.container(key="account_header"):
+        ah1, ah2, ah3 = st.columns([2.4, 1.65, .75], gap="small")
+        with ah1:
+            st.markdown('<div class="section-title">▦ &nbsp;Account Performance</div>', unsafe_allow_html=True)
+        with ah2:
+            if hasattr(st, "segmented_control"):
+                account_mode = st.segmented_control(
+                    "Account Performance metric",
+                    options=["Sales Amount", "Sales Quantity"],
+                    default="Sales Amount",
+                    label_visibility="collapsed",
+                    key="account_mode",
+                )
+            else:
+                account_mode = st.radio(
+                    "Account Performance metric",
+                    ["Sales Amount", "Sales Quantity"],
+                    horizontal=True,
+                    label_visibility="collapsed",
+                    key="account_mode",
+                )
+        with ah3:
+            st.markdown(f'<div class="period-label" style="text-align:right;padding-top:6px">{selected_month} {selected_year}</div>', unsafe_allow_html=True)
+
+    acc_metric = "SALES VALUE" if account_mode == "Sales Amount" else "SALES QUANTITY"
+    account_rows = []
+    for key, display in ACCOUNT_FIXED:
+        if key == "__MTI__":
+            val = float(account_month[account_month["ACCOUNT TYPE"].eq("MTI")][acc_metric].sum())
+        else:
+            val = float(account_month[account_month["CUSTOMER CHAIN"].eq(key)][acc_metric].sum())
+        account_rows.append({"name": display, "value": val})
+
+    acc_total = sum(r["value"] for r in account_rows)
+    for r in account_rows:
+        r["share"] = safe_pct(r["value"], acc_total)
+
+    account_rows_html = horizontal_rows(
+        account_rows,
+        "value",
+        fmt_rp if account_mode == "Sales Amount" else fmt_qty,
     )
-else:
-    account_mode = st.radio(
-        "Account Performance metric",
-        ["Sales Amount", "Sales Quantity"],
-        horizontal=True,
-        label_visibility="collapsed",
-        key="account_mode",
-    )
-
-acc_metric = "SALES VALUE" if account_mode == "Sales Amount" else "SALES QUANTITY"
-
-account_rows = []
-for key, display in ACCOUNT_FIXED:
-    if key == "__MTI__":
-        val = float(
-            account_month[account_month["ACCOUNT TYPE"].eq("MTI")][acc_metric].sum()
-        )
-    else:
-        val = float(
-            account_month[account_month["CUSTOMER CHAIN"].eq(key)][acc_metric].sum()
-        )
-    account_rows.append({"name": display, "value": val})
-
-acc_total = sum(r["value"] for r in account_rows)
-for r in account_rows:
-    r["share"] = safe_pct(r["value"], acc_total)
-
-account_rows_html = horizontal_rows(
-    account_rows,
-    "value",
-    fmt_rp if account_mode == "Sales Amount" else fmt_qty,
-)
-
-account_card_html = (
-    '<div class="card section-card" style="margin-top:4px">'
-    '<div class="section-title-row">'
-    '<div class="section-title">▦ &nbsp;Account Performance</div>'
-    f'<div class="period-label">{account_mode}</div>'
-    '</div>'
-    + account_rows_html
-    + '</div>'
-)
-st.markdown(account_card_html, unsafe_allow_html=True)
+    st.markdown(account_rows_html, unsafe_allow_html=True)
 
 
 # =========================================================
@@ -1205,7 +1442,7 @@ with st.popover("🔐 Admin", use_container_width=False):
 st.markdown(
     """
     <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
-      BUILD V4 — 8 SEP 2026
+      BUILD V5 — 9 SEP 2026
     </div>
     """,
     unsafe_allow_html=True,
