@@ -2,24 +2,17 @@
 import base64
 import io
 import json
-import math
-import os
 from pathlib import Path
 
 import pandas as pd
-import plotly.graph_objects as go
 import requests
 import streamlit as st
-from PIL import Image
+import streamlit.components.v1 as components
 
-
-# =========================================================
-# CONFIG
-# =========================================================
 st.set_page_config(
     page_title="Otogard | Modern Trade Sales Monitoring",
     page_icon="📊",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="collapsed",
 )
 
@@ -60,677 +53,16 @@ PRODUCT_DISPLAY = {
     "EVO ENGINE FLUSH 80ML": "EVO Engine Flush",
 }
 
+st.markdown('''
+<style>
+.stApp {background:#031124;}
+.block-container {max-width:430px!important;padding:0!important;margin:0 auto!important;}
+#MainMenu,header,footer{visibility:hidden;}
+div[data-testid="stVerticalBlock"]{gap:8px!important;}
+div[data-testid="stPopover"]{margin:0 10px 20px 10px!important;}
+</style>
+''', unsafe_allow_html=True)
 
-# =========================================================
-# STYLE
-# Mobile layout tuned to match the approved visual reference.
-# =========================================================
-st.markdown(
-    """
-    <style>
-    :root {
-        --bg:#031124;
-        --bg2:#061a33;
-        --card:#07284a;
-        --card2:#0a3158;
-        --cyan:#10c9ff;
-        --blue:#1677ff;
-        --green:#23e6b1;
-        --yellow:#ffd75e;
-        --orange:#ff944d;
-        --red:#ff575f;
-        --purple:#8c66ff;
-        --text:#f7fbff;
-        --muted:#a9bfd6;
-        --stroke:rgba(16,201,255,.80);
-    }
-
-    html, body, [class*="css"] {
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-                     "Segoe UI", sans-serif;
-    }
-
-    .stApp {
-        background:
-          radial-gradient(circle at 50% -15%, rgba(18,100,190,.22), transparent 35%),
-          linear-gradient(180deg, #031124 0%, #04162a 50%, #031124 100%);
-        color: var(--text);
-    }
-
-    .block-container {
-        max-width: 900px;
-        padding-top: 14px;
-        padding-bottom: 90px;
-        padding-left: 14px;
-        padding-right: 14px;
-    }
-
-    /* hide Streamlit chrome */
-    #MainMenu, footer, header {visibility:hidden;}
-
-    .headline-wrap {
-        display:grid;
-        grid-template-columns: 190px 1fr auto;
-        align-items:center;
-        gap:18px;
-        margin-bottom:14px;
-    }
-    .brand-logo img {
-        width:100%;
-        max-width:190px;
-        max-height:78px;
-        object-fit:contain;
-    }
-    .headline-copy {
-        border-left:1px solid rgba(255,255,255,.4);
-        padding-left:20px;
-        min-width:0;
-    }
-    .headline-main {
-        font-size:32px;
-        line-height:1.0;
-        font-weight:800;
-        letter-spacing:.02em;
-        color:white;
-    }
-    .headline-sub {
-        font-size:27px;
-        line-height:1.1;
-        font-weight:300;
-        color:#e2eef8;
-        margin-top:4px;
-    }
-    .data-badge {
-        border:1px solid rgba(16,201,255,.9);
-        border-radius:10px;
-        padding:8px 12px;
-        background:linear-gradient(180deg, rgba(10,49,88,.94), rgba(4,25,48,.9));
-        min-width:120px;
-        box-shadow:0 0 18px rgba(16,201,255,.10);
-        text-align:center;
-    }
-    .data-badge .tiny {font-size:11px;color:var(--muted);}
-    .data-badge .big {font-size:15px;font-weight:700;color:#fff;}
-
-    div[data-testid="stSelectbox"] > div {
-        background:linear-gradient(180deg, rgba(9,45,82,.95), rgba(5,30,57,.96));
-        border-radius:10px;
-    }
-    div[data-testid="stSelectbox"] label {
-        color:#d9e9f6 !important;
-        font-size:13px !important;
-        font-weight:650 !important;
-    }
-
-    .card {
-        border:1px solid var(--stroke);
-        border-radius:12px;
-        background:
-          linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98));
-        box-shadow:
-          inset 0 0 26px rgba(14,115,190,.08),
-          0 0 18px rgba(0,168,255,.05);
-        overflow:hidden;
-    }
-
-    .hero-card {
-        min-height:338px;
-        padding:18px 20px;
-        background:
-          radial-gradient(circle at 80% 5%, rgba(16,201,255,.24), transparent 34%),
-          linear-gradient(135deg, rgba(8,76,145,.97), rgba(3,28,55,.98));
-    }
-    .side-card {
-        padding:15px 16px;
-        min-height:162px;
-    }
-    .flow-card {
-        padding:15px 16px;
-        min-height:162px;
-    }
-    .section-card {
-        padding:15px 16px;
-        margin-top:16px;
-    }
-    .section-title {
-        font-size:20px;
-        font-weight:750;
-        line-height:1.1;
-        color:#fff;
-        margin:0;
-    }
-    .section-title-row {
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:10px;
-        margin-bottom:10px;
-    }
-    .period-label {
-        color:#d6e7f6;
-        font-size:13px;
-        white-space:nowrap;
-    }
-    .muted {color:var(--muted);}
-    .hero-value {
-        font-size:50px;
-        line-height:1.02;
-        font-weight:800;
-        color:#fff;
-        margin:24px 0 10px;
-        letter-spacing:-.02em;
-    }
-    .hero-growth {
-        font-size:34px;
-        line-height:1;
-        font-weight:800;
-        color:var(--green);
-        display:flex;
-        align-items:center;
-        gap:12px;
-    }
-    .hero-growth span.note {
-        color:#d8e5f1;
-        font-size:14px;
-        font-weight:450;
-        line-height:1.25;
-    }
-    .date-line {
-        font-size:14px;
-        color:#e2edf7;
-        margin-top:4px;
-    }
-    .kpi-big {
-        font-size:39px;
-        font-weight:800;
-        line-height:1;
-        margin:8px 0 6px;
-    }
-    .kpi-grid3, .kpi-grid4, .flow-grid {
-        display:grid;
-        gap:0;
-        margin-top:11px;
-        border:1px solid rgba(62,139,208,.38);
-        border-radius:9px;
-        background:rgba(2,23,44,.25);
-    }
-    .kpi-grid3 {grid-template-columns:repeat(3,1fr);}
-    .kpi-grid4 {grid-template-columns:repeat(4,1fr);}
-    .flow-grid {grid-template-columns:repeat(2,1fr);}
-    .kpi-cell, .flow-cell {
-        padding:10px 12px;
-        border-right:1px solid rgba(142,191,230,.32);
-    }
-    .kpi-cell:last-child, .flow-cell:last-child {border-right:0;}
-    .kpi-label {font-size:12px;color:#dce8f2;}
-    .kpi-value {font-size:18px;font-weight:750;color:#fff;margin-top:2px;}
-    .kpi-value.red {color:var(--red);}
-    .kpi-value.green {color:var(--green);}
-    .flow-title {font-size:13px;color:#dce8f2;}
-    .flow-value {font-size:21px;font-weight:750;margin-top:3px;}
-    .flow-share {font-size:15px;font-weight:700;margin-top:7px;color:#fff;}
-    .mini-bar {
-        height:8px;
-        border-radius:999px;
-        background:#173b60;
-        overflow:hidden;
-        margin-top:5px;
-    }
-    .mini-fill-blue {height:100%;background:linear-gradient(90deg,#108cff,#18c9ff);}
-    .mini-fill-green {height:100%;background:linear-gradient(90deg,#16c99b,#27efbb);}
-
-    .ytd-card {padding:14px 16px;}
-    .ytd-metrics {
-        display:grid;
-        grid-template-columns:repeat(4,1fr);
-        margin-top:9px;
-        border-top:1px solid rgba(87,150,204,.22);
-    }
-    .ytd-item {
-        padding:10px 14px 2px;
-        border-right:1px solid rgba(142,191,230,.35);
-    }
-    .ytd-item:first-child {padding-left:4px;}
-    .ytd-item:last-child {border-right:0;}
-    .ytd-label {font-size:12px;color:#d7e6f3;}
-    .ytd-value {font-size:21px;font-weight:750;margin-top:3px;white-space:nowrap;}
-
-    .table-head, .bar-row {
-        display:grid;
-        grid-template-columns: 2.2fr 3.2fr 1.55fr .7fr;
-        align-items:center;
-        gap:8px;
-    }
-    .table-head {
-        color:#dceaf6;
-        font-size:12px;
-        border-bottom:1px solid rgba(108,173,225,.28);
-        padding:0 0 6px;
-        margin-bottom:5px;
-    }
-    .bar-row {min-height:28px;font-size:13px;}
-    .bar-name {
-        color:#f3f8fc;
-        overflow:hidden;
-        text-overflow:ellipsis;
-        white-space:nowrap;
-    }
-    .bar-track {
-        height:14px;
-        border-radius:4px;
-        background:#173759;
-        overflow:hidden;
-    }
-    .bar-fill {
-        height:100%;
-        border-radius:4px;
-        background:linear-gradient(90deg,#1497ff,#22c8ff);
-    }
-    .bar-fill.g2 {background:linear-gradient(90deg,#16c99b,#31ebbc);}
-    .bar-fill.g3 {background:linear-gradient(90deg,#ffd65a,#ffca42);}
-    .bar-fill.g4 {background:linear-gradient(90deg,#ff9854,#ff8444);}
-    .bar-fill.g5 {background:linear-gradient(90deg,#ff6768,#ff4e59);}
-    .bar-fill.g6 {background:linear-gradient(90deg,#ae6fff,#9458f5);}
-    .bar-amount {text-align:right;color:#f1f7fc;white-space:nowrap;}
-    .bar-share {text-align:right;color:#f1f7fc;white-space:nowrap;}
-
-    .product-head, .product-row {
-        display:grid;
-        grid-template-columns: 2.0fr 3.2fr 1.55fr;
-        align-items:center;
-        gap:8px;
-    }
-    .product-row {min-height:29px;font-size:13px;}
-
-    .account-head, .account-row {
-        display:grid;
-        grid-template-columns: 1.5fr 3.3fr 1.55fr;
-        align-items:center;
-        gap:8px;
-    }
-    .account-row {min-height:30px;font-size:13px;}
-
-    .insight-grid {
-        display:grid;
-        grid-template-columns:repeat(4,1fr);
-        gap:8px;
-        margin-top:10px;
-    }
-    .insight {
-        border:1px solid rgba(54,147,217,.55);
-        background:rgba(8,48,86,.82);
-        border-radius:9px;
-        padding:11px;
-        min-height:98px;
-        display:flex;
-        gap:8px;
-        align-items:flex-start;
-        font-size:12px;
-        line-height:1.35;
-    }
-    .insight-no {
-        width:27px;height:27px;min-width:27px;
-        border-radius:50%;
-        background:#96ccff;
-        color:#07264a;
-        display:flex;align-items:center;justify-content:center;
-        font-weight:800;font-size:14px;
-    }
-
-    .admin-fab {
-        position:fixed;
-        right:18px;
-        bottom:18px;
-        z-index:999;
-    }
-
-
-    /* Compact segmented controls */
-    div[data-testid="stSegmentedControl"] {
-        margin-top: 6px;
-        margin-bottom: 2px;
-    }
-    div[data-testid="stSegmentedControl"] > div {
-        justify-content:flex-end;
-    }
-    div[data-testid="stSegmentedControl"] button {
-        min-height:34px !important;
-        border-color:rgba(62,139,208,.55) !important;
-        background:rgba(6,35,65,.85) !important;
-        color:#dcebf7 !important;
-        font-size:12px !important;
-        padding:5px 14px !important;
-    }
-    div[data-testid="stSegmentedControl"] button[aria-pressed="true"] {
-        background:linear-gradient(180deg,#1e7cff,#1767e5) !important;
-        color:white !important;
-        box-shadow:0 0 12px rgba(30,124,255,.28);
-    }
-
-    .admin-note {
-        border:1px solid rgba(16,201,255,.55);
-        border-radius:10px;
-        padding:12px;
-        background:rgba(4,28,53,.95);
-        color:#dbe9f5;
-        font-size:13px;
-    }
-
-    .divider-space {height:16px;}
-
-
-    /* V9 spacing normalization */
-    .dashboard-stack > div {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
-
-    @media (max-width: 720px) {
-        :root {
-            --m-gap: 10px; /* locked global card gap */
-            --m-radius: 11px;
-            --m-title: 13px;
-            --m-body: 8.5px;
-            --m-kpi-label: 7.5px;
-            --m-kpi-value: 10px;
-        }
-
-        .block-container {
-            max-width: 390px !important;
-            width: 100% !important;
-            margin: 0 auto !important;
-            padding: 8px 10px 84px !important;
-        }
-
-        [data-testid="stVerticalBlock"] { gap: var(--m-gap) !important; }
-
-        /* The page stack owns spacing. Cards themselves never add outer spacing. */
-        .card,
-        .section-card,
-        .st-key-monthly_trend_card,
-        .st-key-product_card,
-        .st-key-account_card {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-        }
-
-        /* Remove Streamlit wrapper margins around our custom HTML cards */
-        div[data-testid="stMarkdownContainer"] > div > .card {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-        }
-
-        /* Top KPI right column: consistent gap between Achievement and Sales Flow */
-        .st-key-top_right [data-testid="stVerticalBlock"] {
-            gap: var(--m-gap) !important;
-        }
-
-        .card,
-        .st-key-monthly_trend_card,
-        .st-key-product_card,
-        .st-key-account_card {
-            border-radius: var(--m-radius) !important;
-        }
-
-        .section-card {
-            padding: 10px 11px !important;
-            margin-top: 0 !important;
-        }
-
-        .headline-wrap {
-            grid-template-columns: 110px minmax(0,1fr) 96px !important;
-            gap: 9px !important;
-            margin-bottom: var(--m-gap) !important;
-        }
-        .brand-logo img { width:106px !important; max-width:106px !important; max-height:50px !important; }
-        .headline-copy { padding-left:9px !important; }
-        .headline-main { font-size:16px !important; line-height:1 !important; }
-        .headline-sub { font-size:14px !important; line-height:1.05 !important; margin-top:3px !important; }
-        .data-badge { min-width:0 !important; padding:6px !important; border-radius:9px !important; }
-        .data-badge .tiny { font-size:7.5px !important; }
-        .data-badge .big { font-size:9.5px !important; }
-
-        div[data-testid="stSelectbox"] {
-            width: 42% !important;
-            margin: 0 0 var(--m-gap) 0 !important;
-        }
-        div[data-testid="stSelectbox"] label { font-size:10.5px !important; margin-bottom:1px !important; }
-        div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
-            min-height:38px !important;
-            height:38px !important;
-            font-size:11px !important;
-            border-radius:9px !important;
-        }
-
-        .st-key-top_kpi [data-testid="stHorizontalBlock"] {
-            flex-wrap:nowrap !important;
-            gap:var(--m-gap) !important;
-            align-items:stretch !important;
-        }
-        .st-key-top_kpi [data-testid="stColumn"]:first-child {
-            flex:.72 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-        .st-key-top_kpi [data-testid="stColumn"]:last-child {
-            flex:1 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-
-        .section-title { font-size:var(--m-title) !important; line-height:1.1 !important; font-weight:750 !important; }
-        .date-line { font-size:7.7px !important; line-height:1.15 !important; margin-top:4px !important; white-space:normal !important; }
-
-        .hero-card {
-            height:242px !important;
-            min-height:242px !important;
-            padding:11px 10px !important;
-        }
-        .hero-value { font-size:27px !important; margin:20px 0 9px !important; }
-        .hero-growth { font-size:19px !important; gap:6px !important; }
-        .hero-growth span.note { font-size:7.5px !important; line-height:1.15 !important; }
-        .sparkline-wrap { margin-top:14px !important; height:63px !important; }
-
-        .side-card,
-        .flow-card {
-            height:115px !important;
-            min-height:115px !important;
-            padding:9px !important;
-        }
-        .kpi-big { font-size:24px !important; margin:4px 0 2px !important; }
-        .achievement-gap { font-size:9px !important; white-space:nowrap !important; }
-        .kpi-grid3, .flow-grid { margin-top:4px !important; border-radius:7px !important; }
-        .kpi-cell, .flow-cell { padding:5px 4px !important; }
-        .kpi-label, .flow-title { font-size:var(--m-kpi-label) !important; line-height:1.1 !important; }
-        .kpi-value { font-size:var(--m-kpi-value) !important; line-height:1.1 !important; }
-        .flow-value { font-size:11.5px !important; line-height:1.05 !important; }
-        .flow-share { font-size:9.5px !important; margin-top:3px !important; }
-        .mini-bar { height:5px !important; margin-top:3px !important; }
-
-        .ytd-card { padding:9px 10px !important; min-height:88px !important; }
-        .section-title-row { margin-bottom:4px !important; }
-        .period-label { font-size:8px !important; line-height:1.1 !important; }
-        .ytd-metrics { margin-top:3px !important; }
-        .ytd-item { padding:6px 5px 1px !important; }
-        .ytd-label { font-size:7px !important; }
-        .ytd-value { font-size:11.2px !important; white-space:nowrap !important; }
-
-        .st-key-monthly_trend_card {
-            border:1px solid var(--stroke) !important;
-            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
-            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05) !important;
-            padding:10px 10px 5px !important;
-            margin-top:0 !important;
-        }
-        .st-key-monthly_trend_card [data-testid="stVerticalBlock"] { gap:0 !important; }
-        .st-key-monthly_trend_card [data-testid="stPlotlyChart"] { margin-top:-2px !important; }
-
-        .table-head, .bar-row {
-            grid-template-columns:2.05fr 2.55fr 1.42fr .55fr !important;
-            gap:4px !important;
-        }
-        .table-head { font-size:7.2px !important; padding-bottom:4px !important; margin-bottom:4px !important; }
-        .bar-row { min-height:22px !important; font-size:var(--m-body) !important; }
-        .bar-name,.bar-amount,.bar-share { font-size:var(--m-body) !important; }
-        .bar-track { height:9px !important; }
-
-        .st-key-product_card,
-        .st-key-account_card {
-            border:1px solid var(--stroke) !important;
-            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
-            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05) !important;
-            padding:9px 10px 8px !important;
-            margin-top:0 !important;
-        }
-        .st-key-product_card [data-testid="stVerticalBlock"],
-        .st-key-account_card [data-testid="stVerticalBlock"] { gap:2px !important; }
-
-        .st-key-product_header [data-testid="stHorizontalBlock"],
-        .st-key-account_header [data-testid="stHorizontalBlock"] {
-            flex-wrap:nowrap !important;
-            gap:5px !important;
-            align-items:center !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(1),
-        .st-key-account_header [data-testid="stColumn"]:nth-child(1) {
-            flex:1.75 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(2),
-        .st-key-account_header [data-testid="stColumn"]:nth-child(2) {
-            flex:1.34 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(3),
-        .st-key-account_header [data-testid="stColumn"]:nth-child(3) {
-            flex:.48 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-
-        div[data-testid="stSegmentedControl"] { margin:0 !important; width:100% !important; }
-        div[data-testid="stSegmentedControl"] > div {
-            justify-content:flex-end !important;
-            gap:0 !important;
-            width:100% !important;
-        }
-        div[data-testid="stSegmentedControl"] button {
-            min-height:21px !important;
-            height:21px !important;
-            padding:1px 5px !important;
-            font-size:6.6px !important;
-            line-height:1 !important;
-            border-radius:5px !important;
-            white-space:nowrap !important;
-            overflow:visible !important;
-            text-overflow:clip !important;
-        }
-
-        .product-row {
-            grid-template-columns:1.78fr 2.48fr 1.42fr !important;
-            gap:4px !important;
-            min-height:23px !important;
-            font-size:8.4px !important;
-        }
-        .account-row {
-            grid-template-columns:1.45fr 2.62fr 1.45fr !important;
-            gap:4px !important;
-            min-height:23px !important;
-            font-size:8.4px !important;
-        }
-
-        .insight-grid {
-            grid-template-columns:repeat(4,1fr) !important;
-            gap:5px !important;
-            margin-top:7px !important;
-        }
-        .insight {
-            min-height:92px !important;
-            padding:6px 5px !important;
-            gap:4px !important;
-            font-size:7.7px !important;
-            line-height:1.24 !important;
-        }
-        .insight-no {
-            width:20px !important;
-            height:20px !important;
-            min-width:20px !important;
-            font-size:8.5px !important;
-        }
-
-        [data-testid="stPopover"] button {
-            min-height:32px !important;
-            font-size:10px !important;
-        }
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# =========================================================
-# HELPERS
-# =========================================================
-def fmt_rp(v):
-    v = 0 if pd.isna(v) else float(v)
-    av = abs(v)
-    sign = "-" if v < 0 else ""
-    if av >= 1_000_000_000:
-        return f"{sign}Rp {av/1_000_000_000:.2f} B"
-    if av >= 1_000_000:
-        return f"{sign}Rp {av/1_000_000:.1f} M"
-    if av >= 1_000:
-        return f"{sign}Rp {av/1_000:.1f} K"
-    return f"{sign}Rp {av:,.0f}"
-
-
-def fmt_qty(v):
-    v = 0 if pd.isna(v) else float(v)
-    if abs(v) >= 1_000_000:
-        return f"{v/1_000_000:.2f} M pcs"
-    if abs(v) >= 1_000:
-        return f"{v/1_000:.1f} K pcs"
-    return f"{v:,.0f} pcs"
-
-
-def month_label(month, year):
-    return f"{month} {year}"
-
-
-def safe_pct(num, den):
-    if den is None or den == 0 or pd.isna(den):
-        return 0.0
-    return float(num) / float(den) * 100.0
-
-
-def read_logo_b64():
-    if not LOGO_PATH.exists():
-        return ""
-    return base64.b64encode(LOGO_PATH.read_bytes()).decode("utf-8")
-
-
-
-def sparkline_svg(series, width=310, height=82):
-    vals = [float(v) for v in series if pd.notna(v)]
-    if not vals:
-        vals = [0, 0]
-    if len(vals) == 1:
-        vals = [0, vals[0]]
-    lo, hi = min(vals), max(vals)
-    span = hi - lo if hi != lo else 1.0
-    pad_x, pad_y = 4, 7
-    pts = []
-    for i, v in enumerate(vals):
-        x = pad_x + (width - pad_x*2) * i / max(1, len(vals)-1)
-        y = height - pad_y - (height - pad_y*2) * (v-lo) / span
-        pts.append((x,y))
-    path = " ".join(f"{x:.1f},{y:.1f}" for x,y in pts)
-    lastx,lasty = pts[-1]
-    return (
-        f'<svg viewBox="0 0 {width} {height}" width="100%" height="100%" preserveAspectRatio="none">'
-        f'<defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">'
-        f'<stop offset="0%" stop-color="#168cff" stop-opacity=".32"/>'
-        f'<stop offset="100%" stop-color="#168cff" stop-opacity="0"/>'
-        f'</linearGradient></defs>'
-        f'<polygon points="{pad_x},{height-pad_y} {path} {lastx:.1f},{height-pad_y}" fill="url(#sparkFill)"/>'
-        f'<polyline points="{path}" fill="none" stroke="#1bc7ff" stroke-width="3" '
-        f'stroke-linecap="round" stroke-linejoin="round"/>'
-        f'<circle cx="{lastx:.1f}" cy="{lasty:.1f}" r="4" fill="#21dbff"/>'
-        f'</svg>'
-    )
 
 def normalise_sales(df):
     df = df.copy()
@@ -749,21 +81,18 @@ def normalise_sales(df):
                 "CUSTOMER CHAIN", "SKU NAME", "MONTH"]:
         df[col] = df[col].astype(str).str.strip().str.upper()
 
-    # Restore expected month casing after normalization
     reverse_month = {m.upper(): m for m in MONTH_ORDER}
     df["MONTH"] = df["MONTH"].map(reverse_month).fillna(df["MONTH"].str.title())
-
     df["YEAR"] = pd.to_numeric(df["YEAR"], errors="coerce").astype("Int64")
     df["DATE"] = pd.to_numeric(df["DATE"], errors="coerce").fillna(1).astype(int)
     df["SALES VALUE"] = pd.to_numeric(df["SALES VALUE"], errors="coerce").fillna(0.0)
     df["SALES QUANTITY"] = pd.to_numeric(df["SALES QUANTITY"], errors="coerce").fillna(0.0)
-
     df["MONTH NUM"] = df["MONTH"].map(MONTH_NUM)
     df["FULL DATE"] = pd.to_datetime(
         dict(
             year=df["YEAR"].astype("Int64"),
             month=df["MONTH NUM"],
-            day=df["DATE"].clip(1, 31)
+            day=df["DATE"].clip(1, 31),
         ),
         errors="coerce",
     )
@@ -779,7 +108,6 @@ def normalise_target(df):
     df["SALES TARGET"] = pd.to_numeric(df["SALES TARGET"], errors="coerce").fillna(0.0)
     df["YEAR"] = df["MONTH"].dt.year
     df["MONTH NUM"] = df["MONTH"].dt.month
-    df["MONTH LABEL"] = df["MONTH"].dt.strftime("%b")
     return df
 
 
@@ -790,10 +118,8 @@ def validate_workbook(file_like):
             return False, "Sheet 'Sales Database' tidak ditemukan."
         if "MONTHLY TARGET" not in xls.sheet_names:
             return False, "Sheet 'MONTHLY TARGET' tidak ditemukan."
-        sales = pd.read_excel(xls, "Sales Database", header=1)
-        target = pd.read_excel(xls, "MONTHLY TARGET")
-        sales = normalise_sales(sales)
-        target = normalise_target(target)
+        sales = normalise_sales(pd.read_excel(xls, "Sales Database", header=1))
+        target = normalise_target(pd.read_excel(xls, "MONTHLY TARGET"))
         if sales.empty:
             return False, "Sales Database kosong."
         return True, (sales, target)
@@ -802,7 +128,6 @@ def validate_workbook(file_like):
 
 
 def load_db_bytes():
-    # Uploaded file in this browser session has priority.
     if "uploaded_db_bytes" in st.session_state:
         return st.session_state["uploaded_db_bytes"]
     if DEFAULT_DB.exists():
@@ -812,47 +137,33 @@ def load_db_bytes():
 
 @st.cache_data(show_spinner=False)
 def parse_db_bytes(raw_bytes):
-    bio = io.BytesIO(raw_bytes)
-    xls = pd.ExcelFile(bio)
-    sales = pd.read_excel(xls, "Sales Database", header=1)
-    target = pd.read_excel(xls, "MONTHLY TARGET")
-    return normalise_sales(sales), normalise_target(target)
+    xls = pd.ExcelFile(io.BytesIO(raw_bytes))
+    sales = normalise_sales(pd.read_excel(xls, "Sales Database", header=1))
+    target = normalise_target(pd.read_excel(xls, "MONTHLY TARGET"))
+    return sales, target
 
 
 def github_persist(raw_bytes):
-    """
-    Optional persistent updater.
-    Configure Streamlit secrets:
-      GITHUB_TOKEN
-      REPO            e.g. username/repository
-      BRANCH          e.g. main
-      FILE_PATH       e.g. "MT - Daily Sales Database(1).xlsx"
-    """
     required = ["GITHUB_TOKEN", "REPO", "BRANCH", "FILE_PATH"]
     if not all(k in st.secrets for k in required):
-        return False, "GitHub persistence belum dikonfigurasi. Data aktif untuk session ini saja."
+        return False, "GitHub persistence belum dikonfigurasi."
 
     token = st.secrets["GITHUB_TOKEN"]
     repo = st.secrets["REPO"]
     branch = st.secrets["BRANCH"]
     file_path = st.secrets["FILE_PATH"]
-
     api = f"https://api.github.com/repos/{repo}/contents/{file_path}"
+
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
     }
-
     get_resp = requests.get(api, headers=headers, params={"ref": branch}, timeout=30)
-    sha = None
-    if get_resp.status_code == 200:
-        sha = get_resp.json().get("sha")
-    elif get_resp.status_code not in (404,):
-        return False, f"GitHub read failed: {get_resp.status_code} {get_resp.text[:160]}"
+    sha = get_resp.json().get("sha") if get_resp.status_code == 200 else None
 
     payload = {
-        "message": "Update Modern Trade daily sales database from Streamlit Admin Mode",
+        "message": "Update Modern Trade sales database from Admin Mode",
         "content": base64.b64encode(raw_bytes).decode("utf-8"),
         "branch": branch,
     }
@@ -861,43 +172,8 @@ def github_persist(raw_bytes):
 
     put_resp = requests.put(api, headers=headers, json=payload, timeout=45)
     if put_resp.status_code not in (200, 201):
-        return False, f"GitHub update failed: {put_resp.status_code} {put_resp.text[:180]}"
+        return False, f"GitHub update failed: {put_resp.status_code}"
     return True, "Database berhasil disimpan ke GitHub."
-
-
-def filter_account(df, selected):
-    if selected == "All Account":
-        return df
-    d = df.copy()
-    if selected == "MTI":
-        return d[d["ACCOUNT TYPE"].eq("MTI")]
-    mapping = {
-        "Indomaret": "INDOMARET",
-        "Alfamart": "ALFAMART",
-        "Alfamidi": "ALFAMIDI",
-        "Superindo": "LION SUPERINDO",
-    }
-    val = mapping.get(selected)
-    if val:
-        return d[d["CUSTOMER CHAIN"].eq(val)]
-    return d
-
-
-def direct_base(df, selected_account):
-    d = df[df["DISTRIBUTION TYPE"].eq("DIRECT")].copy()
-    return filter_account(d, selected_account)
-
-
-def account_perf_base(df, selected_account):
-    # FINAL RULE:
-    # Distribution Type = ALL
-    # Account Type = EXCLUDE DISTRIBUTOR
-    d = df[~df["ACCOUNT TYPE"].eq("DISTRIBUTOR")].copy()
-    return filter_account(d, selected_account)
-
-
-def selected_month_df(df, year, month):
-    return df[(df["YEAR"].eq(year)) & (df["MONTH"].eq(month))].copy()
 
 
 def target_value(target_df, year, month_num):
@@ -905,91 +181,171 @@ def target_value(target_df, year, month_num):
     return float(x["SALES TARGET"].sum()) if len(x) else 0.0
 
 
-def make_monthly_chart(direct_df, target_df, year, selected_month_num):
-    months = MONTH_ORDER[:selected_month_num]
-    vals = []
-    targets = []
-    for m in months:
-        vals.append(float(direct_df[
-            (direct_df["YEAR"].eq(year)) & (direct_df["MONTH"].eq(m))
-        ]["SALES VALUE"].sum()))
-        targets.append(target_value(target_df, year, MONTH_NUM[m]))
+def safe_pct(num, den):
+    return 0.0 if not den else float(num) / float(den) * 100.0
 
-    fig = go.Figure()
-    fig.add_trace(go.Bar(
-        x=months,
-        y=vals,
-        name="Actual",
-        marker=dict(
-            color=vals,
-            colorscale=[[0, "#0d78ff"], [1, "#17caff"]],
-            line=dict(color="#24c8ff", width=1.2),
-        ),
-        hovertemplate="%{x}<br>Actual: Rp %{y:,.0f}<extra></extra>",
-    ))
-    fig.add_trace(go.Scatter(
-        x=months,
-        y=targets,
-        name="Target",
-        mode="lines+markers",
-        line=dict(color="#eef7ff", width=2, dash="dash"),
-        marker=dict(size=7, color="#eef7ff"),
-        hovertemplate="%{x}<br>Target: Rp %{y:,.0f}<extra></extra>",
-    ))
-    fig.update_layout(
-        height=258,
-        margin=dict(l=2, r=2, t=3, b=1),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#d8e8f5", size=11),
-        legend=dict(
-            orientation="h", yanchor="bottom", y=1.01, xanchor="right", x=1,
-            bgcolor="rgba(0,0,0,0)", font=dict(size=10)
-        ),
-        bargap=.45,
-        xaxis=dict(showgrid=False, zeroline=False),
-        yaxis=dict(
-            gridcolor="rgba(119,168,210,.17)",
-            zeroline=False,
-            tickformat="~s",
-            title="Sales",
-        ),
-        hoverlabel=dict(bgcolor="#071d36", font_color="#fff"),
+
+def fmt_rp(v):
+    v = float(v or 0)
+    sign = "-" if v < 0 else ""
+    a = abs(v)
+    if a >= 1_000_000_000:
+        return f"{sign}Rp {a/1_000_000_000:.2f} B"
+    if a >= 1_000_000:
+        return f"{sign}Rp {a/1_000_000:.1f} M"
+    if a >= 1_000:
+        return f"{sign}Rp {a/1_000:.1f} K"
+    return f"{sign}Rp {a:,.0f}"
+
+
+def account_perf_base(df):
+    return df[~df["ACCOUNT TYPE"].eq("DISTRIBUTOR")].copy()
+
+
+def build_month_payload(sales_df, target_df, year, month):
+    mnum = MONTH_NUM[month]
+    direct_all = sales_df[sales_df["DISTRIBUTION TYPE"].eq("DIRECT")].copy()
+    direct_month = direct_all[(direct_all["YEAR"].eq(year)) & (direct_all["MONTH"].eq(month))].copy()
+
+    month_max_day = int(direct_month["DATE"].max()) if len(direct_month) else 1
+    selected_start = pd.Timestamp(year, mnum, 1)
+    month_days = pd.Period(selected_start, freq="M").days_in_month
+    month_max_day = min(max(month_max_day, 1), month_days)
+
+    prev_start = selected_start - pd.DateOffset(months=1)
+    prev_year = int(prev_start.year)
+    prev_mnum = int(prev_start.month)
+    prev_month = MONTH_ORDER[prev_mnum - 1]
+    prev_days = pd.Period(prev_start, freq="M").days_in_month
+    prev_end_day = min(month_max_day, prev_days)
+
+    current_same = direct_month[direct_month["DATE"].le(month_max_day)]
+    previous_same = direct_all[
+        (direct_all["YEAR"].eq(prev_year))
+        & (direct_all["MONTH"].eq(prev_month))
+        & (direct_all["DATE"].le(prev_end_day))
+    ]
+
+    mtd_actual = float(current_same["SALES VALUE"].sum())
+    prev_actual = float(previous_same["SALES VALUE"].sum())
+    growth = ((mtd_actual / prev_actual) - 1) * 100 if prev_actual else 0.0
+
+    mtd_target = target_value(target_df, year, mnum)
+    mtd_gap = mtd_actual - mtd_target
+    mtd_ach = safe_pct(mtd_actual, mtd_target)
+
+    sales_to_dist = float(
+        direct_month[direct_month["CATEGORY"].eq("SALES TO DISTRIBUTOR")]["SALES VALUE"].sum()
     )
-    return fig
+    sales_to_store = float(
+        direct_month[direct_month["CATEGORY"].eq("SALES TO MARKET")]["SALES VALUE"].sum()
+    )
+    flow_total = sales_to_dist + sales_to_store
+    dist_share = safe_pct(sales_to_dist, flow_total)
+    store_share = safe_pct(sales_to_store, flow_total)
 
+    ytd_direct = direct_all[
+        (direct_all["YEAR"].eq(year)) & (direct_all["MONTH NUM"].le(mnum))
+    ]
+    ytd_actual = float(ytd_direct["SALES VALUE"].sum())
+    ytd_target = float(
+        target_df[
+            (target_df["YEAR"].eq(year)) & (target_df["MONTH NUM"].le(mnum))
+        ]["SALES TARGET"].sum()
+    )
+    ytd_gap = ytd_actual - ytd_target
+    ytd_ach = safe_pct(ytd_actual, ytd_target)
 
-def horizontal_rows(rows, value_key, amount_formatter, name_key="name"):
-    maxv = max([float(r[value_key]) for r in rows] + [1])
-    parts = []
-    for i, r in enumerate(rows):
-        pct = max(0, min(100, float(r[value_key]) / maxv * 100))
-        cls = f"g{min(i+1,6)}" if i > 0 else ""
-        parts.append(
-            f'<div class="product-row">'
-            f'<div class="bar-name">{r[name_key]}</div>'
-            f'<div class="bar-track"><div class="bar-fill {cls}" style="width:{pct:.1f}%"></div></div>'
-            f'<div class="bar-amount">{amount_formatter(r[value_key])} ({r.get("share",0):.0f}%)</div>'
-            f'</div>'
+    trend_months = MONTH_ORDER[:mnum]
+    trend_actual = []
+    trend_target = []
+    for m in trend_months:
+        trend_actual.append(
+            float(
+                direct_all[
+                    (direct_all["YEAR"].eq(year)) & (direct_all["MONTH"].eq(m))
+                ]["SALES VALUE"].sum()
+            )
         )
-    return "".join(parts)
+        trend_target.append(target_value(target_df, year, MONTH_NUM[m]))
+
+    daily = (
+        current_same.groupby("DATE")["SALES VALUE"]
+        .sum()
+        .reindex(range(1, month_max_day + 1), fill_value=0)
+        .cumsum()
+        .tolist()
+    )
+
+    customer_total = float(direct_month["SALES VALUE"].sum())
+    customers = []
+    for key, display in CUSTOMER_FIXED:
+        val = float(direct_month[direct_month["CUSTOMER CHAIN"].eq(key)]["SALES VALUE"].sum())
+        customers.append({"name": display, "value": val, "share": safe_pct(val, customer_total)})
+
+    products = {}
+    for metric_name, col in [("value", "SALES VALUE"), ("quantity", "SALES QUANTITY")]:
+        grouped = (
+            direct_month.groupby("SKU NAME", as_index=False)[col]
+            .sum()
+            .sort_values(col, ascending=False)
+            .head(5)
+        )
+        total = float(direct_month[col].sum())
+        rows = []
+        for _, r in grouped.iterrows():
+            raw = str(r["SKU NAME"]).strip().upper()
+            rows.append({
+                "name": PRODUCT_DISPLAY.get(raw, raw.title()),
+                "value": float(r[col]),
+                "share": safe_pct(float(r[col]), total),
+            })
+        products[metric_name] = rows
+
+    acc_month = account_perf_base(sales_df)
+    acc_month = acc_month[(acc_month["YEAR"].eq(year)) & (acc_month["MONTH"].eq(month))]
+    accounts = {}
+    for metric_name, col in [("value", "SALES VALUE"), ("quantity", "SALES QUANTITY")]:
+        rows = []
+        for key, display in ACCOUNT_FIXED:
+            if key == "__MTI__":
+                val = float(acc_month[acc_month["ACCOUNT TYPE"].eq("MTI")][col].sum())
+            else:
+                val = float(acc_month[acc_month["CUSTOMER CHAIN"].eq(key)][col].sum())
+            rows.append({"name": display, "value": val})
+        total = sum(r["value"] for r in rows)
+        for r in rows:
+            r["share"] = safe_pct(r["value"], total)
+        accounts[metric_name] = rows
+
+    top_customer = max(customers, key=lambda x: x["value"]) if customers else {"name":"-", "share":0}
+    top_account = max(accounts["value"], key=lambda x: x["value"]) if accounts["value"] else {"name":"-"}
+
+    return {
+        "month": month, "year": int(year), "latest_day": int(month_max_day),
+        "previous_month": prev_month, "previous_year": prev_year, "previous_day": int(prev_end_day),
+        "mtd_actual": mtd_actual, "growth": growth, "mtd_target": mtd_target,
+        "mtd_gap": mtd_gap, "mtd_achievement": mtd_ach,
+        "sales_to_distributor": sales_to_dist, "sales_to_stores": sales_to_store,
+        "distributor_share": dist_share, "stores_share": store_share,
+        "ytd_actual": ytd_actual, "ytd_target": ytd_target,
+        "ytd_gap": ytd_gap, "ytd_achievement": ytd_ach,
+        "sparkline": daily, "trend_months": trend_months,
+        "trend_actual": trend_actual, "trend_target": trend_target,
+        "customers": customers, "products": products, "accounts": accounts,
+        "insights": [
+            f"{top_customer['name']} contributes {top_customer['share']:.0f}% of Direct sales in {month}.",
+            f"Sales to Stores contributes {store_share:.0f}% of Direct MTD sales.",
+            f"Achievement is {mtd_ach:.0f}% with a gap of {fmt_rp(mtd_gap)} against target.",
+            f"{top_account['name']} is the largest non-distributor account contributor for the selected month.",
+        ],
+    }
 
 
-# =========================================================
-# DATA
-# =========================================================
 raw = load_db_bytes()
 sales_df, target_df = parse_db_bytes(raw)
-
-available_years = sorted([int(x) for x in sales_df["YEAR"].dropna().unique()])
-if not available_years:
-    st.error("No valid YEAR values found in Sales Database.")
-    st.stop()
-
-latest_row = sales_df.dropna(subset=["FULL DATE"]).sort_values("FULL DATE").tail(1)
-if len(latest_row):
-    latest_date = latest_row.iloc[0]["FULL DATE"]
-else:
+latest_date = sales_df["FULL DATE"].dropna().max()
+if pd.isna(latest_date):
     latest_date = pd.Timestamp.today()
 
 selected_year = int(latest_date.year)
@@ -1000,391 +356,120 @@ available_months = [
 if not available_months:
     available_months = [MONTH_ORDER[int(latest_date.month)-1]]
 
+dashboard_data = {m: build_month_payload(sales_df, target_df, selected_year, m) for m in available_months}
+
+logo_b64 = base64.b64encode(LOGO_PATH.read_bytes()).decode("utf-8") if LOGO_PATH.exists() else ""
+data_json = json.dumps(dashboard_data, ensure_ascii=False)
+months_json = json.dumps(available_months)
 default_month = available_months[-1]
+latest_label = pd.Timestamp(latest_date).strftime("%d %b %Y").lstrip("0")
 
-if "month_filter" not in st.session_state:
-    st.session_state["month_filter"] = default_month
-if st.session_state["month_filter"] not in available_months:
-    st.session_state["month_filter"] = default_month
+html = r'''
+<!doctype html><html><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#031124;color:#f7fbff;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{display:flex;justify-content:center}
+#app{width:100%;max-width:390px;padding:10px 10px 18px}
+:root{--gap:10px;--radius:11px;--stroke:#14c5ff;--muted:#a9bfd6;--green:#20e5b0;--red:#ff5d66}
+.header{display:grid;grid-template-columns:112px 1fr 96px;gap:9px;align-items:center;margin-bottom:10px}
+.logo{width:108px;height:48px;object-fit:contain}
+.headcopy{border-left:1px solid rgba(255,255,255,.35);padding-left:9px;min-width:0}
+.headline{font-size:17px;font-weight:800;line-height:1;white-space:nowrap}
+.subhead{font-size:14px;font-weight:300;color:#dce9f5;margin-top:4px;line-height:1}
+.datebadge{border:1px solid var(--stroke);border-radius:9px;padding:6px;text-align:center;background:linear-gradient(180deg,#0b3159,#061e39)}
+.datebadge .tiny{font-size:7.5px;color:var(--muted)} .datebadge .big{font-size:10px;font-weight:800;margin-top:2px}
+.filter-label{font-size:11px;margin-bottom:3px}
+select{width:42%;height:38px;border-radius:9px;border:1px solid #343946;background:#242731;color:#fff;padding:0 12px;font-size:11px;outline:none;margin-bottom:10px}
+.grid-top{display:grid;grid-template-columns:42% 1fr;gap:10px;align-items:stretch}
+.stack-right{display:grid;grid-template-rows:115px 115px;gap:10px}
+.card{border:1px solid var(--stroke);border-radius:var(--radius);background:linear-gradient(135deg,#0c3b69,#061e3a);box-shadow:inset 0 0 20px rgba(14,115,190,.08);overflow:hidden}
+.hero{height:240px;padding:11px 10px;background:radial-gradient(circle at 80% 5%,rgba(16,201,255,.22),transparent 34%),linear-gradient(135deg,#095396,#061f3f)}
+.achievement,.flow{height:115px;padding:9px}
+.title{font-size:13px;font-weight:750;line-height:1.08}
+.dates{font-size:7.5px;color:#dce8f2;margin-top:4px;line-height:1.15}
+.hero-value{font-size:27px;font-weight:800;margin:22px 0 10px;line-height:1}
+.growth{font-size:19px;font-weight:800;color:var(--green);display:flex;gap:6px;align-items:center}
+.growth small{font-size:7.5px;color:#dce8f2;font-weight:400;line-height:1.15}
+.spark{height:62px;margin-top:13px}.spark svg{width:100%;height:100%}
+.ach-row{display:flex;align-items:center;justify-content:center;gap:10px}
+.ach-big{font-size:24px;font-weight:800;line-height:1;margin:4px 0 2px}.gap-pct{font-size:9px;color:var(--red);white-space:nowrap}
+.kpi3{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:4px;background:rgba(1,18,35,.18)}
+.kcell{padding:5px 4px;border-right:1px solid rgba(142,191,230,.26)}.kcell:last-child{border-right:none}
+.klab{font-size:7px;color:#dce8f2}.kval{font-size:9.5px;font-weight:750;margin-top:2px;white-space:nowrap}
+.red{color:#ff5d66}.green{color:#20e5b0}
+.flowgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:5px}
+.flowcell{padding:5px 4px;border-right:1px solid rgba(142,191,230,.26)}.flowcell:last-child{border-right:none}
+.flowlab{font-size:7px;color:#dce8f2}.flowval{font-size:11.5px;font-weight:750;margin-top:2px}
+.flowshare{font-size:9.5px;font-weight:750;margin-top:4px}.track{height:5px;background:#163b61;border-radius:999px;overflow:hidden;margin-top:3px}
+.fill-blue{height:100%;background:linear-gradient(90deg,#188eff,#22c9ff)}.fill-green{height:100%;background:linear-gradient(90deg,#16c99b,#2cebb9)}
+.section{margin-top:10px;padding:10px 11px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.period{font-size:8px;color:#dbe8f3;white-space:nowrap}
+.ytd{min-height:88px}.ytdgrid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(102,164,213,.22)}
+.ycell{padding:7px 6px 1px;border-right:1px solid rgba(142,191,230,.26)}.ycell:last-child{border-right:none}
+.ylab{font-size:7px;color:#dce8f2}.yval{font-size:11px;font-weight:750;margin-top:3px;white-space:nowrap}
+.trend{height:270px}.chart-wrap{height:225px;margin-top:2px}.chart-wrap svg{width:100%;height:100%;display:block}
+.rows-head,.customer-row{display:grid;grid-template-columns:2.05fr 2.55fr 1.42fr .55fr;gap:4px;align-items:center}
+.rows-head{font-size:7px;color:#dce8f2;border-bottom:1px solid rgba(110,169,216,.25);padding-bottom:4px}
+.customer-row{min-height:22px;font-size:8.2px}.name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:9px;background:#163959;border-radius:4px;overflow:hidden}.barfill{height:100%;border-radius:4px}
+.amount,.share{text-align:right;white-space:nowrap}
+.c1{background:linear-gradient(90deg,#1497ff,#22c8ff)}.c2{background:linear-gradient(90deg,#16c99b,#31ebbc)}.c3{background:linear-gradient(90deg,#ffd65a,#ffca42)}.c4{background:linear-gradient(90deg,#ff9854,#ff8444)}.c5{background:linear-gradient(90deg,#ff6768,#ff4e59)}.c6{background:linear-gradient(90deg,#ae6fff,#9458f5)}
+.ctrl-card{margin-top:10px;padding:9px 10px}.ctrl-head{display:grid;grid-template-columns:1.75fr 1.2fr .55fr;gap:5px;align-items:center;margin-bottom:6px}
+.toggle{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(73,128,177,.55);border-radius:5px;overflow:hidden;height:22px}
+.toggle button{border:0;background:#081d35;color:#dbe9f5;font-size:7px;padding:0 3px;cursor:pointer}.toggle button.active{background:linear-gradient(180deg,#1d7cff,#1768e6);color:#fff}
+.product-row{display:grid;grid-template-columns:1.78fr 2.48fr 1.42fr;gap:4px;align-items:center;min-height:23px;font-size:8.2px}
+.account-row{display:grid;grid-template-columns:1.45fr 2.62fr 1.45fr;gap:4px;align-items:center;min-height:23px;font-size:8.2px}
+.insights{min-height:136px}.insight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}
+.insight{min-height:92px;border:1px solid rgba(54,147,217,.55);background:rgba(8,48,86,.82);border-radius:8px;padding:7px 6px;display:flex;gap:4px;font-size:7.5px;line-height:1.22}
+.no{width:20px;height:20px;min-width:20px;border-radius:50%;background:#96ccff;color:#07264a;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:8.5px}
+.footer{color:#6f879d;font-size:8px;text-align:center;letter-spacing:.16em;margin-top:24px}.build{color:#56738d;font-size:7.5px;text-align:center;margin-top:12px}
+</style></head><body><div id="app">
+<div class="header"><img class="logo" src="data:image/png;base64,__LOGO__"/><div class="headcopy"><div class="headline">MODERN TRADE</div><div class="subhead">Sales Monitoring</div></div><div class="datebadge"><div class="tiny">Data per</div><div class="big">__LATEST__</div></div></div>
+<div class="filter-label">📅 Month</div><select id="monthSelect"></select>
+<div class="grid-top">
+<div class="card hero"><div class="title">Sales – Month to Date</div><div class="dates" id="mtdDates"></div><div class="hero-value" id="mtdActual"></div><div class="growth"><span id="growthValue"></span><small>vs same period<br/>last month</small></div><div class="spark" id="spark"></div></div>
+<div class="stack-right">
+<div class="card achievement"><div class="title">🎯 &nbsp;Achievement</div><div class="ach-row"><div class="ach-big" id="mtdAch"></div><div class="gap-pct" id="mtdGapPct"></div></div><div class="kpi3"><div class="kcell"><div class="klab">Actual MTD</div><div class="kval" id="achActual"></div></div><div class="kcell"><div class="klab">Target MTD</div><div class="kval" id="achTarget"></div></div><div class="kcell"><div class="klab">Gap</div><div class="kval red" id="achGap"></div></div></div></div>
+<div class="card flow"><div class="title">⇄ &nbsp;Sales Flow Breakdown</div><div class="flowgrid"><div class="flowcell"><div class="flowlab">Sales to Distributor</div><div class="flowval" id="distVal"></div><div class="flowshare" id="distShare"></div><div class="track"><div class="fill-blue" id="distBar"></div></div></div><div class="flowcell"><div class="flowlab">Sales to Stores</div><div class="flowval" id="storeVal"></div><div class="flowshare" id="storeShare"></div><div class="track"><div class="fill-green" id="storeBar"></div></div></div></div></div>
+</div></div>
+<div class="card section ytd"><div class="section-head"><div class="title">▥ &nbsp;YTD Sales</div><div class="period" id="ytdPeriod"></div></div><div class="ytdgrid"><div class="ycell"><div class="ylab">Actual Sales</div><div class="yval" id="ytdActual"></div></div><div class="ycell"><div class="ylab">Sales Target</div><div class="yval" id="ytdTarget"></div></div><div class="ycell"><div class="ylab">Gap</div><div class="yval red" id="ytdGap"></div></div><div class="ycell"><div class="ylab">Achievement</div><div class="yval green" id="ytdAch"></div></div></div></div>
+<div class="card section trend"><div class="section-head"><div class="title">↗ &nbsp;Monthly Sales Trend</div><div class="period"><span style="color:#18bfff">■</span> Actual &nbsp;&nbsp; ─●─ Target</div></div><div class="chart-wrap" id="trendChart"></div></div>
+<div class="card section"><div class="section-head"><div class="title">▦ &nbsp;Sales by Customer <span style="font-size:8px;font-weight:400">(Direct Channel)</span></div><div class="period" id="customerPeriod"></div></div><div class="rows-head"><div>Customer</div><div></div><div style="text-align:right">Sales Amount</div><div style="text-align:right">Share</div></div><div id="customerRows"></div></div>
+<div class="card ctrl-card"><div class="ctrl-head"><div class="title">◇ &nbsp;Sales by Product</div><div class="toggle"><button id="prodValue" class="active">Value</button><button id="prodQty">Quantity</button></div><div class="period" id="productPeriod"></div></div><div id="productRows"></div></div>
+<div class="card ctrl-card"><div class="ctrl-head"><div class="title">▦ &nbsp;Account Performance</div><div class="toggle"><button id="accValue" class="active">Value</button><button id="accQty">Quantity</button></div><div class="period" id="accountPeriod"></div></div><div id="accountRows"></div></div>
+<div class="card section insights"><div class="title">💡 &nbsp;Insights</div><div class="insight-grid" id="insightRows"></div></div>
+<div class="build">BUILD V10 CLEAN REBUILD — 14 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
+</div>
+<script>
+const DATA=__DATA__,MONTHS=__MONTHS__;let selectedMonth="__DEFAULT__",productMetric="value",accountMetric="value";
+const colors=["c1","c2","c3","c4","c5","c6"];
+function rp(v){const s=v<0?"-":"",a=Math.abs(v||0);if(a>=1e9)return `${s}Rp ${(a/1e9).toFixed(2)} B`;if(a>=1e6)return `${s}Rp ${(a/1e6).toFixed(1)} M`;if(a>=1e3)return `${s}Rp ${(a/1e3).toFixed(1)} K`;return `${s}Rp ${Math.round(a).toLocaleString()}`;}
+function qty(v){const a=Math.abs(v||0);if(a>=1e6)return (v/1e6).toFixed(2)+" M";if(a>=1e3)return (v/1e3).toFixed(1)+" K";return Math.round(v).toLocaleString();}
+function pct(v){return `${Math.round(v||0)}%`;}
+function sparkline(vals){const w=150,h=62,p=4;if(!vals||!vals.length)vals=[0,0];let lo=Math.min(...vals),hi=Math.max(...vals);if(hi===lo)hi=lo+1;const pts=vals.map((v,i)=>{const x=p+(w-p*2)*(i/Math.max(1,vals.length-1));const y=h-p-(h-p*2)*((v-lo)/(hi-lo));return[x,y]});const path=pts.map(x=>x.join(",")).join(" "),last=pts[pts.length-1];return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${path}" fill="none" stroke="#1bc7ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3.2" fill="#21dbff"/></svg>`;}
+function trendSvg(d){const labels=d.trend_months,actual=d.trend_actual,target=d.trend_target,w=350,h=220,left=36,right=8,top=14,bottom=28,cw=w-left-right,ch=h-top-bottom,maxv=Math.max(1,...actual,...target)*1.12,n=labels.length,step=cw/Math.max(n,1),barW=Math.min(24,step*.55);let bars="",xl="",grid="",lp="",cir="";[0,.25,.5,.75,1].forEach(fr=>{const y=top+ch*(1-fr),val=maxv*fr;grid+=`<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="rgba(111,164,207,.18)" stroke-width="1"/><text x="${left-5}" y="${y+3}" fill="#b8cce0" font-size="8" text-anchor="end">${val>=1e9?(val/1e9).toFixed(1)+"B":Math.round(val/1e6)+"M"}</text>`});labels.forEach((lab,i)=>{const cx=left+step*(i+.5),bh=ch*(actual[i]/maxv),y=top+ch-bh,ty=top+ch-ch*(target[i]/maxv);bars+=`<rect x="${cx-barW/2}" y="${y}" width="${barW}" height="${bh}" rx="1.5" fill="#18bfff" stroke="#22c9ff" stroke-width=".7"/>`;xl+=`<text x="${cx}" y="${h-9}" fill="#d6e4f1" font-size="8" text-anchor="middle">${lab}</text>`;lp+=`${cx},${ty} `;cir+=`<circle cx="${cx}" cy="${ty}" r="3" fill="#edf7ff"/>`});return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${grid}${bars}<polyline points="${lp}" fill="none" stroke="#edf7ff" stroke-width="2" stroke-dasharray="6 5"/>${cir}${xl}</svg>`;}
+function customerRows(rows){const max=Math.max(1,...rows.map(r=>r.value));return rows.map((r,i)=>`<div class="customer-row"><div class="name">${r.name}</div><div class="bar"><div class="barfill ${colors[Math.min(i,5)]}" style="width:${Math.max(0,r.value/max*100)}%"></div></div><div class="amount">${rp(r.value)}</div><div class="share">${Math.round(r.share)}%</div></div>`).join("");}
+function metricRows(rows,metric,type){const max=Math.max(1,...rows.map(r=>r.value)),cls=type==="product"?"product-row":"account-row";return rows.map((r,i)=>`<div class="${cls}"><div class="name">${r.name}</div><div class="bar"><div class="barfill ${colors[Math.min(i,5)]}" style="width:${Math.max(0,r.value/max*100)}%"></div></div><div class="amount">${metric==="value"?rp(r.value):qty(r.value)} (${Math.round(r.share)}%)</div></div>`).join("");}
+function render(){const d=DATA[selectedMonth];document.getElementById("mtdDates").innerText=`1 – ${d.latest_day} ${d.month} ${d.year} | vs 1 – ${d.previous_day} ${d.previous_month} ${d.previous_year}`;document.getElementById("mtdActual").innerText=rp(d.mtd_actual);const g=d.growth||0,gv=document.getElementById("growthValue");gv.innerText=`${g>=0?"▲":"▼"} ${g>=0?"+":""}${g.toFixed(1)}%`;gv.style.color=g>=0?"#20e5b0":"#ff5d66";document.getElementById("spark").innerHTML=sparkline(d.sparkline);document.getElementById("mtdAch").innerText=pct(d.mtd_achievement);const gp=d.mtd_target?d.mtd_gap/d.mtd_target*100:0;document.getElementById("mtdGapPct").innerText=`${gp>=0?"▲":"▼"} ${gp>=0?"+":""}${gp.toFixed(1)}% (Gap)`;document.getElementById("achActual").innerText=rp(d.mtd_actual);document.getElementById("achTarget").innerText=rp(d.mtd_target);document.getElementById("achGap").innerText=rp(d.mtd_gap);document.getElementById("distVal").innerText=rp(d.sales_to_distributor);document.getElementById("storeVal").innerText=rp(d.sales_to_stores);document.getElementById("distShare").innerText=pct(d.distributor_share);document.getElementById("storeShare").innerText=pct(d.stores_share);document.getElementById("distBar").style.width=`${d.distributor_share}%`;document.getElementById("storeBar").style.width=`${d.stores_share}%`;document.getElementById("ytdPeriod").innerText=`Jan – ${d.month} ${d.year}`;document.getElementById("ytdActual").innerText=rp(d.ytd_actual);document.getElementById("ytdTarget").innerText=rp(d.ytd_target);document.getElementById("ytdGap").innerText=rp(d.ytd_gap);document.getElementById("ytdAch").innerText=pct(d.ytd_achievement);document.getElementById("trendChart").innerHTML=trendSvg(d);document.getElementById("customerPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("customerRows").innerHTML=customerRows(d.customers);document.getElementById("productPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("productRows").innerHTML=metricRows(d.products[productMetric],productMetric,"product");document.getElementById("accountPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("accountRows").innerHTML=metricRows(d.accounts[accountMetric],accountMetric,"account");document.getElementById("insightRows").innerHTML=d.insights.map((x,i)=>`<div class="insight"><div class="no">${i+1}</div><div>${x}</div></div>`).join("");}
+const sel=document.getElementById("monthSelect");MONTHS.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;if(m===selectedMonth)o.selected=true;sel.appendChild(o)});sel.addEventListener("change",e=>{selectedMonth=e.target.value;render()});
+document.getElementById("prodValue").onclick=()=>{productMetric="value";prodValue.classList.add("active");prodQty.classList.remove("active");render()};document.getElementById("prodQty").onclick=()=>{productMetric="quantity";prodQty.classList.add("active");prodValue.classList.remove("active");render()};document.getElementById("accValue").onclick=()=>{accountMetric="value";accValue.classList.add("active");accQty.classList.remove("active");render()};document.getElementById("accQty").onclick=()=>{accountMetric="quantity";accQty.classList.add("active");accValue.classList.remove("active");render()};render();
+</script></body></html>
+'''
 
+html = (html
+        .replace("__LOGO__", logo_b64)
+        .replace("__LATEST__", latest_label)
+        .replace("__DATA__", data_json)
+        .replace("__MONTHS__", months_json)
+        .replace("__DEFAULT__", default_month))
 
-# =========================================================
-# HEADER
-# =========================================================
-logo_b64 = read_logo_b64()
-latest_label = pd.Timestamp(latest_date).strftime("%-d %b %Y") if os.name != "nt" else pd.Timestamp(latest_date).strftime("%d %b %Y").lstrip("0")
+components.html(html, height=1900, scrolling=False)
 
-st.markdown(
-    f"""
-    <div class="headline-wrap">
-      <div class="brand-logo">
-        {'<img src="data:image/png;base64,' + logo_b64 + '">' if logo_b64 else '<div style="font-size:24px;font-weight:800">otogard</div>'}
-      </div>
-      <div class="headline-copy">
-        <div class="headline-main">MODERN TRADE</div>
-        <div class="headline-sub">Sales Monitoring</div>
-      </div>
-      <div class="data-badge">
-        <div class="tiny">Data per</div>
-        <div class="big">{latest_label}</div>
-      </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-selected_month = st.selectbox(
-    "📅 Month",
-    available_months,
-    index=available_months.index(st.session_state["month_filter"]),
-    key="month_filter_select",
-)
-st.session_state["month_filter"] = selected_month
-
-# Account filter intentionally removed from UI.
-# Dashboard always shows All Account at the global level.
-selected_account = "All Account"
-
-selected_month_num = MONTH_NUM[selected_month]
-
-direct_all = direct_base(sales_df, selected_account)
-direct_month = selected_month_df(direct_all, selected_year, selected_month)
-account_all = account_perf_base(sales_df, selected_account)
-account_month = selected_month_df(account_all, selected_year, selected_month)
-
-# Date context for same-period comparison
-month_max_day = int(direct_month["DATE"].max()) if len(direct_month) else 0
-month_max_day = month_max_day or 1
-selected_start = pd.Timestamp(selected_year, selected_month_num, 1)
-selected_end = pd.Timestamp(selected_year, selected_month_num, min(month_max_day, pd.Period(selected_start, freq="M").days_in_month))
-prev_start = selected_start - pd.DateOffset(months=1)
-prev_month_num = int(prev_start.month)
-prev_month_label = MONTH_ORDER[prev_month_num - 1]
-prev_year = int(prev_start.year)
-prev_end_day = min(month_max_day, pd.Period(prev_start, freq="M").days_in_month)
-
-prev_direct = direct_all[
-    (direct_all["YEAR"].eq(prev_year))
-    & (direct_all["MONTH"].eq(prev_month_label))
-    & (direct_all["DATE"].le(prev_end_day))
-]
-cur_direct_same = direct_month[direct_month["DATE"].le(month_max_day)]
-
-mtd_actual = float(cur_direct_same["SALES VALUE"].sum())
-prev_same = float(prev_direct["SALES VALUE"].sum())
-growth = ((mtd_actual / prev_same) - 1) * 100 if prev_same else 0.0
-
-mtd_target = target_value(target_df, selected_year, selected_month_num)
-mtd_gap = mtd_actual - mtd_target
-mtd_ach = safe_pct(mtd_actual, mtd_target)
-
-sales_to_dist = float(direct_month[direct_month["CATEGORY"].eq("SALES TO DISTRIBUTOR")]["SALES VALUE"].sum())
-sales_to_store = float(direct_month[direct_month["CATEGORY"].eq("SALES TO MARKET")]["SALES VALUE"].sum())
-flow_total = sales_to_dist + sales_to_store
-share_dist = safe_pct(sales_to_dist, flow_total)
-share_store = safe_pct(sales_to_store, flow_total)
-
-# YTD
-ytd_direct = direct_all[
-    (direct_all["YEAR"].eq(selected_year))
-    & (direct_all["MONTH NUM"].le(selected_month_num))
-]
-ytd_actual = float(ytd_direct["SALES VALUE"].sum())
-ytd_target = float(target_df[
-    (target_df["YEAR"].eq(selected_year))
-    & (target_df["MONTH NUM"].le(selected_month_num))
-]["SALES TARGET"].sum())
-ytd_gap = ytd_actual - ytd_target
-ytd_ach = safe_pct(ytd_actual, ytd_target)
-
-
-# =========================================================
-# TOP KPI AREA
-# =========================================================
-growth_arrow = "▲" if growth >= 0 else "▼"
-growth_color = "#23e6b1" if growth >= 0 else "#ff575f"
-gap_pct = safe_pct(mtd_gap, mtd_target)
-
-daily_mtd = (
-    cur_direct_same.groupby("DATE")["SALES VALUE"].sum()
-    .reindex(range(1, month_max_day + 1), fill_value=0)
-)
-daily_cum = daily_mtd.cumsum().tolist()
-spark_svg = sparkline_svg(daily_cum)
-
-with st.container(key="top_kpi"):
-    left, right = st.columns([1.08, 1], gap="small")
-
-    with left:
-        st.markdown(
-            f"""
-            <div class="card hero-card">
-              <div class="section-title">Sales – Month to Date</div>
-              <div class="date-line">1 – {month_max_day} {selected_month} {selected_year}
-                &nbsp; | &nbsp; vs 1 – {prev_end_day} {prev_month_label} {prev_year}</div>
-              <div class="hero-value">{fmt_rp(mtd_actual)}</div>
-              <div class="hero-growth" style="color:{growth_color}">
-                {growth_arrow} {growth:+.1f}%
-                <span class="note">vs same period<br>last month</span>
-              </div>
-              <div class="sparkline-wrap">{spark_svg}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with right:
-        with st.container(key="top_right"):
-            st.markdown(
-                f"""
-                <div class="card side-card">
-                  <div class="section-title">🎯 &nbsp;Achievement</div>
-                  <div style="display:flex;align-items:center;justify-content:center;gap:12px">
-                    <div class="kpi-big">{mtd_ach:.0f}%</div>
-                    <div class="achievement-gap" style="font-size:16px;color:{'#23e6b1' if mtd_gap>=0 else '#ff6a70'}">
-                      {'▲' if mtd_gap>=0 else '▼'} {gap_pct:+.1f}% (Gap)
-                    </div>
-                  </div>
-                  <div class="kpi-grid3">
-                    <div class="kpi-cell"><div class="kpi-label">Actual MTD</div><div class="kpi-value">{fmt_rp(mtd_actual)}</div></div>
-                    <div class="kpi-cell"><div class="kpi-label">Target MTD</div><div class="kpi-value">{fmt_rp(mtd_target)}</div></div>
-                    <div class="kpi-cell"><div class="kpi-label">Gap</div><div class="kpi-value {'green' if mtd_gap>=0 else 'red'}">{fmt_rp(mtd_gap)}</div></div>
-                  </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                f"""
-                <div class="card flow-card">
-                  <div class="section-title">⇄ &nbsp;Sales Flow Breakdown</div>
-                  <div class="flow-grid">
-                    <div class="flow-cell">
-                      <div class="flow-title">Sales to Distributor</div>
-                      <div class="flow-value">{fmt_rp(sales_to_dist)}</div>
-                      <div class="flow-share">{share_dist:.0f}%</div>
-                      <div class="mini-bar"><div class="mini-fill-blue" style="width:{share_dist:.1f}%"></div></div>
-                    </div>
-                    <div class="flow-cell">
-                      <div class="flow-title">Sales to Stores</div>
-                      <div class="flow-value">{fmt_rp(sales_to_store)}</div>
-                      <div class="flow-share">{share_store:.0f}%</div>
-                      <div class="mini-bar"><div class="mini-fill-green" style="width:{share_store:.1f}%"></div></div>
-                    </div>
-                  </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-
-
-# =========================================================
-# YTD
-# =========================================================
-st.markdown(
-    f"""
-    <div class="card section-card ytd-card">
-      <div class="section-title-row">
-        <div class="section-title">▥ &nbsp;YTD Sales</div>
-        <div class="period-label">Jan – {selected_month} {selected_year}{' (MTD)' if month_max_day < pd.Period(selected_start, freq='M').days_in_month else ''}</div>
-      </div>
-      <div class="ytd-metrics">
-        <div class="ytd-item"><div class="ytd-label">Actual Sales</div><div class="ytd-value">{fmt_rp(ytd_actual)}</div></div>
-        <div class="ytd-item"><div class="ytd-label">Sales Target</div><div class="ytd-value">{fmt_rp(ytd_target)}</div></div>
-        <div class="ytd-item"><div class="ytd-label">Gap</div><div class="ytd-value" style="color:{'#23e6b1' if ytd_gap>=0 else '#ff575f'}">{fmt_rp(ytd_gap)}</div></div>
-        <div class="ytd-item"><div class="ytd-label">Achievement</div><div class="ytd-value" style="color:#23e6b1">{ytd_ach:.0f}%</div></div>
-      </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# =========================================================
-# MONTHLY SALES TREND
-# =========================================================
-with st.container(key="monthly_trend_card"):
-    st.markdown('<div class="section-title">↗ &nbsp;Monthly Sales Trend</div>', unsafe_allow_html=True)
-    fig = make_monthly_chart(direct_all, target_df, selected_year, selected_month_num)
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-
-
-# =========================================================
-# SALES BY CUSTOMER
-# =========================================================
-cust_rows = []
-cust_total = float(direct_month["SALES VALUE"].sum())
-for key, display in CUSTOMER_FIXED:
-    val = float(direct_month[direct_month["CUSTOMER CHAIN"].eq(key)]["SALES VALUE"].sum())
-    cust_rows.append({"name": display, "value": val, "share": safe_pct(val, cust_total)})
-
-max_cust = max([r["value"] for r in cust_rows] + [1])
-customer_html = ""
-for i, r in enumerate(cust_rows):
-    pct = r["value"] / max_cust * 100
-    cls = f"g{min(i+1,6)}" if i else ""
-    customer_html += f"""
-    <div class="bar-row">
-      <div class="bar-name">{r['name']}</div>
-      <div class="bar-track"><div class="bar-fill {cls}" style="width:{pct:.1f}%"></div></div>
-      <div class="bar-amount">{fmt_rp(r['value'])}</div>
-      <div class="bar-share">{r['share']:.0f}%</div>
-    </div>
-    """
-
-st.markdown(
-    f"""
-    <div class="card section-card">
-      <div class="section-title-row">
-        <div class="section-title">▦ &nbsp;Sales by Customer <span style="font-size:8px;font-weight:400">(Direct Channel)</span></div>
-        <div class="period-label">{selected_month} {selected_year}</div>
-      </div>
-      <div class="table-head">
-        <div>Customer</div><div></div><div style="text-align:right">Sales Amount</div><div style="text-align:right">Share</div>
-      </div>
-      {customer_html}
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# =========================================================
-# SALES BY PRODUCT
-# =========================================================
-with st.container(key="product_card"):
-    with st.container(key="product_header"):
-        ph1, ph2, ph3 = st.columns([2.4, 1.65, .75], gap="small")
-        with ph1:
-            st.markdown('<div class="section-title">◇ &nbsp;Sales by Product</div>', unsafe_allow_html=True)
-        with ph2:
-            if hasattr(st, "segmented_control"):
-                product_mode = st.segmented_control(
-                    "Sales by Product metric",
-                    options=["Value", "Quantity"],
-                    default="Value",
-                    label_visibility="collapsed",
-                    key="product_mode",
-                )
-            else:
-                product_mode = st.radio(
-                    "Sales by Product metric",
-                    ["Value", "Quantity"],
-                    horizontal=True,
-                    label_visibility="collapsed",
-                    key="product_mode",
-                )
-        with ph3:
-            st.markdown(f'<div class="period-label" style="text-align:right;padding-top:6px">{selected_month} {selected_year}</div>', unsafe_allow_html=True)
-
-    metric_col = "SALES VALUE" if product_mode == "Value" else "SALES QUANTITY"
-    prod = (
-        direct_month.groupby("SKU NAME", as_index=False)[metric_col]
-        .sum()
-        .sort_values(metric_col, ascending=False)
-        .head(5)
-    )
-    prod_total = float(direct_month[metric_col].sum())
-    prod_rows = []
-    for _, row in prod.iterrows():
-        raw_name = str(row["SKU NAME"]).strip().upper()
-        name = PRODUCT_DISPLAY.get(raw_name, raw_name.title())
-        val = float(row[metric_col])
-        prod_rows.append({"name": name, "value": val, "share": safe_pct(val, prod_total)})
-
-    product_rows_html = horizontal_rows(
-        prod_rows,
-        "value",
-        fmt_rp if product_mode == "Value" else fmt_qty,
-    )
-    st.markdown(product_rows_html if product_rows_html else '<div class="muted">No data.</div>', unsafe_allow_html=True)
-
-
-# =========================================================
-# ACCOUNT PERFORMANCE
-# =========================================================
-with st.container(key="account_card"):
-    with st.container(key="account_header"):
-        ah1, ah2, ah3 = st.columns([2.4, 1.65, .75], gap="small")
-        with ah1:
-            st.markdown('<div class="section-title">▦ &nbsp;Account Performance</div>', unsafe_allow_html=True)
-        with ah2:
-            if hasattr(st, "segmented_control"):
-                account_mode = st.segmented_control(
-                    "Account Performance metric",
-                    options=["Value", "Quantity"],
-                    default="Value",
-                    label_visibility="collapsed",
-                    key="account_mode",
-                )
-            else:
-                account_mode = st.radio(
-                    "Account Performance metric",
-                    ["Value", "Quantity"],
-                    horizontal=True,
-                    label_visibility="collapsed",
-                    key="account_mode",
-                )
-        with ah3:
-            st.markdown(f'<div class="period-label" style="text-align:right;padding-top:6px">{selected_month} {selected_year}</div>', unsafe_allow_html=True)
-
-    acc_metric = "SALES VALUE" if account_mode == "Value" else "SALES QUANTITY"
-    account_rows = []
-    for key, display in ACCOUNT_FIXED:
-        if key == "__MTI__":
-            val = float(account_month[account_month["ACCOUNT TYPE"].eq("MTI")][acc_metric].sum())
-        else:
-            val = float(account_month[account_month["CUSTOMER CHAIN"].eq(key)][acc_metric].sum())
-        account_rows.append({"name": display, "value": val})
-
-    acc_total = sum(r["value"] for r in account_rows)
-    for r in account_rows:
-        r["share"] = safe_pct(r["value"], acc_total)
-
-    account_rows_html = horizontal_rows(
-        account_rows,
-        "value",
-        fmt_rp if account_mode == "Value" else fmt_qty,
-    )
-    st.markdown(account_rows_html, unsafe_allow_html=True)
-
-
-# =========================================================
-# INSIGHTS
-# =========================================================
-top_cust = max(cust_rows, key=lambda x: x["value"]) if cust_rows else {"name":"-", "share":0}
-largest_product = max(prod_rows, key=lambda x: x["value"]) if prod_rows else {"name":"-", "share":0}
-acc_top = max(account_rows, key=lambda x: x["value"]) if account_rows else {"name":"-", "share":0}
-
-insights = [
-    f"{top_cust['name']} contributes {top_cust['share']:.0f}% of Direct sales in {selected_month}.",
-    f"Sales to Stores contributes {share_store:.0f}% of Direct MTD sales.",
-    f"Achievement is {mtd_ach:.0f}% with a gap of {fmt_rp(mtd_gap)} against target.",
-    f"{acc_top['name']} is the largest non-distributor account contributor for the selected month.",
-]
-insight_html = "".join(
-    f'<div class="insight"><div class="insight-no">{i+1}</div><div>{txt}</div></div>'
-    for i, txt in enumerate(insights)
-)
-st.markdown(
-    f"""
-    <div class="card section-card">
-      <div class="section-title">💡 &nbsp;Insights</div>
-      <div class="insight-grid">{insight_html}</div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# =========================================================
-# ADMIN MODE - low profile / floating
-# =========================================================
-with st.popover("🔐 Admin", use_container_width=False):
+with st.popover("🔐 Admin"):
     st.markdown("### Admin Mode")
-    st.caption("Upload latest daily sales database without cluttering the main dashboard.")
-
+    st.caption("Upload database terbaru untuk refresh dashboard.")
     admin_password = st.text_input("Admin password", type="password", key="admin_password")
     configured_password = st.secrets.get("ADMIN_PASSWORD", "otogard-admin")
 
@@ -1397,23 +482,16 @@ with st.popover("🔐 Admin", use_container_width=False):
             if not ok:
                 st.error(result)
             else:
-                up_sales, up_target = result
+                up_sales, _ = result
                 max_date = up_sales["FULL DATE"].max()
-                st.info(
-                    f"Valid file • {len(up_sales):,} sales rows • "
-                    f"latest data {pd.Timestamp(max_date).strftime('%d %b %Y')}"
-                )
+                st.info(f"Valid file • {len(up_sales):,} sales rows • latest data {pd.Timestamp(max_date).strftime('%d %b %Y')}")
                 if st.button("Update Data", type="primary", use_container_width=True):
-                    # Keep active immediately.
                     st.session_state["uploaded_db_bytes"] = up_bytes
                     parse_db_bytes.clear()
-
                     persisted, message = github_persist(up_bytes)
                     if persisted:
                         st.success(message)
                     else:
-                        # Also update local file when possible (works in local dev;
-                        # Streamlit Cloud local storage may be ephemeral).
                         try:
                             DEFAULT_DB.write_bytes(up_bytes)
                             st.warning(message + " Local app file was updated where writable.")
@@ -1422,21 +500,3 @@ with st.popover("🔐 Admin", use_container_width=False):
                     st.rerun()
     elif admin_password:
         st.error("Incorrect password.")
-
-st.markdown(
-    """
-    <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
-      BUILD V9 — 14 SEP 2026
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    """
-    <div style="text-align:center;color:#849bb2;font-size:10px;letter-spacing:.16em;margin-top:28px">
-      OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
