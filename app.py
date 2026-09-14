@@ -418,6 +418,13 @@ st.markdown(
 
     .divider-space {height:16px;}
 
+
+    /* V9 spacing normalization */
+    .dashboard-stack > div {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
     @media (max-width: 720px) {
         :root {
             --m-gap: 10px; /* locked global card gap */
@@ -436,6 +443,27 @@ st.markdown(
         }
 
         [data-testid="stVerticalBlock"] { gap: var(--m-gap) !important; }
+
+        /* The page stack owns spacing. Cards themselves never add outer spacing. */
+        .card,
+        .section-card,
+        .st-key-monthly_trend_card,
+        .st-key-product_card,
+        .st-key-account_card {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* Remove Streamlit wrapper margins around our custom HTML cards */
+        div[data-testid="stMarkdownContainer"] > div > .card {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* Top KPI right column: consistent gap between Achievement and Sales Flow */
+        .st-key-top_right [data-testid="stVerticalBlock"] {
+            gap: var(--m-gap) !important;
+        }
 
         .card,
         .st-key-monthly_trend_card,
@@ -1106,48 +1134,49 @@ with st.container(key="top_kpi"):
         )
 
     with right:
-        st.markdown(
-            f"""
-            <div class="card side-card">
-              <div class="section-title">🎯 &nbsp;Achievement</div>
-              <div style="display:flex;align-items:center;justify-content:center;gap:12px">
-                <div class="kpi-big">{mtd_ach:.0f}%</div>
-                <div class="achievement-gap" style="font-size:16px;color:{'#23e6b1' if mtd_gap>=0 else '#ff6a70'}">
-                  {'▲' if mtd_gap>=0 else '▼'} {gap_pct:+.1f}% (Gap)
+        with st.container(key="top_right"):
+            st.markdown(
+                f"""
+                <div class="card side-card">
+                  <div class="section-title">🎯 &nbsp;Achievement</div>
+                  <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+                    <div class="kpi-big">{mtd_ach:.0f}%</div>
+                    <div class="achievement-gap" style="font-size:16px;color:{'#23e6b1' if mtd_gap>=0 else '#ff6a70'}">
+                      {'▲' if mtd_gap>=0 else '▼'} {gap_pct:+.1f}% (Gap)
+                    </div>
+                  </div>
+                  <div class="kpi-grid3">
+                    <div class="kpi-cell"><div class="kpi-label">Actual MTD</div><div class="kpi-value">{fmt_rp(mtd_actual)}</div></div>
+                    <div class="kpi-cell"><div class="kpi-label">Target MTD</div><div class="kpi-value">{fmt_rp(mtd_target)}</div></div>
+                    <div class="kpi-cell"><div class="kpi-label">Gap</div><div class="kpi-value {'green' if mtd_gap>=0 else 'red'}">{fmt_rp(mtd_gap)}</div></div>
+                  </div>
                 </div>
-              </div>
-              <div class="kpi-grid3">
-                <div class="kpi-cell"><div class="kpi-label">Actual MTD</div><div class="kpi-value">{fmt_rp(mtd_actual)}</div></div>
-                <div class="kpi-cell"><div class="kpi-label">Target MTD</div><div class="kpi-value">{fmt_rp(mtd_target)}</div></div>
-                <div class="kpi-cell"><div class="kpi-label">Gap</div><div class="kpi-value {'green' if mtd_gap>=0 else 'red'}">{fmt_rp(mtd_gap)}</div></div>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.markdown('<div style="height:10px"></div>', unsafe_allow_html=True)
-        st.markdown(
-            f"""
-            <div class="card flow-card">
-              <div class="section-title">⇄ &nbsp;Sales Flow Breakdown</div>
-              <div class="flow-grid">
-                <div class="flow-cell">
-                  <div class="flow-title">Sales to Distributor</div>
-                  <div class="flow-value">{fmt_rp(sales_to_dist)}</div>
-                  <div class="flow-share">{share_dist:.0f}%</div>
-                  <div class="mini-bar"><div class="mini-fill-blue" style="width:{share_dist:.1f}%"></div></div>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.markdown(
+                f"""
+                <div class="card flow-card">
+                  <div class="section-title">⇄ &nbsp;Sales Flow Breakdown</div>
+                  <div class="flow-grid">
+                    <div class="flow-cell">
+                      <div class="flow-title">Sales to Distributor</div>
+                      <div class="flow-value">{fmt_rp(sales_to_dist)}</div>
+                      <div class="flow-share">{share_dist:.0f}%</div>
+                      <div class="mini-bar"><div class="mini-fill-blue" style="width:{share_dist:.1f}%"></div></div>
+                    </div>
+                    <div class="flow-cell">
+                      <div class="flow-title">Sales to Stores</div>
+                      <div class="flow-value">{fmt_rp(sales_to_store)}</div>
+                      <div class="flow-share">{share_store:.0f}%</div>
+                      <div class="mini-bar"><div class="mini-fill-green" style="width:{share_store:.1f}%"></div></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="flow-cell">
-                  <div class="flow-title">Sales to Stores</div>
-                  <div class="flow-value">{fmt_rp(sales_to_store)}</div>
-                  <div class="flow-share">{share_store:.0f}%</div>
-                  <div class="mini-bar"><div class="mini-fill-green" style="width:{share_store:.1f}%"></div></div>
-                </div>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+                """,
+                unsafe_allow_html=True,
+            )
+
 
 
 # =========================================================
@@ -1397,7 +1426,7 @@ with st.popover("🔐 Admin", use_container_width=False):
 st.markdown(
     """
     <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
-      BUILD V8 — 14 SEP 2026
+      BUILD V9 — 14 SEP 2026
     </div>
     """,
     unsafe_allow_html=True,
