@@ -419,335 +419,212 @@ st.markdown(
     .divider-space {height:16px;}
 
     @media (max-width: 720px) {
+        :root {
+            --m-gap: 10px;
+            --m-radius: 11px;
+            --m-title: 13px;
+            --m-body: 8.5px;
+            --m-kpi-label: 7.5px;
+            --m-kpi-value: 10px;
+        }
+
         .block-container {
             max-width: 390px !important;
             width: 100% !important;
             margin: 0 auto !important;
-            padding: 8px 10px 84px 10px !important;
+            padding: 8px 10px 84px !important;
         }
 
-        /* GLOBAL RHYTHM */
-        [data-testid="stVerticalBlock"] { gap: 0.50rem !important; }
-        .card {
-            border-radius: 11px !important;
-        }
-        .section-card {
-            padding: 11px 12px !important;
-            margin-top: 10px !important;
-        }
+        [data-testid="stVerticalBlock"] { gap: var(--m-gap) !important; }
 
-        /* HEADER */
-        .headline-wrap {
-            grid-template-columns: 112px minmax(0,1fr) 96px !important;
-            gap: 9px !important;
-            margin-bottom: 9px !important;
-            align-items: center !important;
-        }
-        .brand-logo img {
-            width: 108px !important;
-            max-width: 108px !important;
-            max-height: 52px !important;
-        }
-        .headline-copy {
-            padding-left: 9px !important;
-        }
-        .headline-main {
-            font-size: 17px !important;
-            line-height: 1.00 !important;
-            font-weight: 800 !important;
-            letter-spacing: .01em !important;
-        }
-        .headline-sub {
-            font-size: 15px !important;
-            line-height: 1.05 !important;
-            margin-top: 3px !important;
-        }
-        .data-badge {
-            padding: 6px 6px !important;
-            border-radius: 9px !important;
-            min-width: 0 !important;
-        }
-        .data-badge .tiny { font-size: 8px !important; }
-        .data-badge .big  { font-size: 10px !important; }
-
-        /* MONTH FILTER */
-        div[data-testid="stSelectbox"] {
-            width: 51.5% !important;
-            margin: 0 0 7px 0 !important;
-        }
-        div[data-testid="stSelectbox"] label {
-            font-size: 11px !important;
-            margin-bottom: 1px !important;
-        }
-        div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
-            min-height: 39px !important;
-            height: 39px !important;
-            font-size: 12px !important;
-            border-radius: 9px !important;
-        }
-
-        /* TOP KPI GRID */
-        .st-key-top_kpi [data-testid="stHorizontalBlock"] {
-            flex-wrap: nowrap !important;
-            gap: 8px !important;
-            align-items: stretch !important;
-        }
-        .st-key-top_kpi [data-testid="stColumn"]:first-child {
-            flex: 1.08 1 0 !important;
-            width: 0 !important;
-            min-width: 0 !important;
-        }
-        .st-key-top_kpi [data-testid="stColumn"]:last-child {
-            flex: 1 1 0 !important;
-            width: 0 !important;
-            min-width: 0 !important;
-        }
-
-        /* HERO MTD */
-        .hero-card {
-            height: 286px !important;
-            min-height: 286px !important;
-            padding: 13px 12px !important;
-        }
-        .section-title {
-            font-size: 14px !important;
-            line-height: 1.08 !important;
-            font-weight: 750 !important;
-        }
-        .date-line {
-            font-size: 8.5px !important;
-            line-height: 1.1 !important;
-            margin-top: 4px !important;
-            white-space: nowrap !important;
-        }
-        .hero-value {
-            font-size: 31px !important;
-            line-height: 1.0 !important;
-            margin: 27px 0 11px !important;
-        }
-        .hero-growth {
-            font-size: 22px !important;
-            gap: 7px !important;
-        }
-        .hero-growth span.note {
-            font-size: 8.5px !important;
-            line-height: 1.15 !important;
-        }
-        .sparkline-wrap {
-            margin-top: 15px !important;
-            height: 78px !important;
-        }
-
-        /* ACHIEVEMENT + FLOW */
-        .side-card {
-            height: 137px !important;
-            min-height: 137px !important;
-            padding: 10px 9px !important;
-        }
-        .flow-card {
-            height: 141px !important;
-            min-height: 141px !important;
-            padding: 10px 9px !important;
-        }
-        .kpi-big {
-            font-size: 27px !important;
-            margin: 5px 0 2px !important;
-        }
-        .achievement-gap {
-            font-size: 10px !important;
-            white-space: nowrap !important;
-        }
-        .kpi-grid3 {
-            margin-top: 4px !important;
-            border-radius: 7px !important;
-        }
-        .kpi-cell, .flow-cell {
-            padding: 5px 4px !important;
-        }
-        .kpi-label, .flow-title {
-            font-size: 7.5px !important;
-            line-height: 1.1 !important;
-        }
-        .kpi-value {
-            font-size: 9.5px !important;
-            line-height: 1.1 !important;
-        }
-        .flow-value {
-            font-size: 12.5px !important;
-            line-height: 1.05 !important;
-        }
-        .flow-share {
-            font-size: 10px !important;
-            margin-top: 3px !important;
-        }
-        .mini-bar {
-            height: 5px !important;
-            margin-top: 3px !important;
-        }
-
-        /* YTD */
-        .ytd-card {
-            padding: 9px 10px !important;
-            min-height: 92px !important;
-        }
-        .section-title-row {
-            margin-bottom: 4px !important;
-        }
-        .period-label {
-            font-size: 8.5px !important;
-            line-height: 1.1 !important;
-        }
-        .ytd-metrics {
-            margin-top: 3px !important;
-        }
-        .ytd-item {
-            padding: 6px 6px 1px !important;
-        }
-        .ytd-label {
-            font-size: 7.5px !important;
-        }
-        .ytd-value {
-            font-size: 11.5px !important;
-            white-space: nowrap !important;
-        }
-
-        /* MONTHLY SALES TREND */
-        .st-key-monthly_trend_card {
-            border: 1px solid var(--stroke) !important;
-            border-radius: 11px !important;
-            background: linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
-            box-shadow: inset 0 0 26px rgba(14,115,190,.08), 0 0 18px rgba(0,168,255,.05) !important;
-            padding: 10px 10px 5px !important;
-            margin-top: 10px !important;
-        }
-        .st-key-monthly_trend_card [data-testid="stVerticalBlock"] {
-            gap: 0 !important;
-        }
-        .st-key-monthly_trend_card [data-testid="stPlotlyChart"] {
-            margin-top: -3px !important;
-        }
-
-        /* CUSTOMER */
-        .table-head, .bar-row {
-            grid-template-columns: 2.05fr 2.65fr 1.38fr .52fr !important;
-            gap: 4px !important;
-        }
-        .table-head {
-            font-size: 7.5px !important;
-            padding-bottom: 4px !important;
-            margin-bottom: 4px !important;
-        }
-        .bar-row {
-            min-height: 23px !important;
-            font-size: 8.5px !important;
-        }
-        .bar-name, .bar-amount, .bar-share {
-            font-size: 8.5px !important;
-        }
-        .bar-track {
-            height: 9px !important;
-        }
-
-        /* PRODUCT / ACCOUNT WRAPPER CARDS */
+        .card,
+        .st-key-monthly_trend_card,
         .st-key-product_card,
         .st-key-account_card {
-            border: 1px solid var(--stroke) !important;
-            border-radius: 11px !important;
-            background: linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
-            box-shadow: inset 0 0 26px rgba(14,115,190,.08), 0 0 18px rgba(0,168,255,.05) !important;
-            padding: 10px 10px 9px !important;
-            margin-top: 10px !important;
+            border-radius: var(--m-radius) !important;
+        }
+
+        .section-card {
+            padding: 10px 11px !important;
+            margin-top: 0 !important;
+        }
+
+        .headline-wrap {
+            grid-template-columns: 110px minmax(0,1fr) 96px !important;
+            gap: 9px !important;
+            margin-bottom: var(--m-gap) !important;
+        }
+        .brand-logo img { width:106px !important; max-width:106px !important; max-height:50px !important; }
+        .headline-copy { padding-left:9px !important; }
+        .headline-main { font-size:16px !important; line-height:1 !important; }
+        .headline-sub { font-size:14px !important; line-height:1.05 !important; margin-top:3px !important; }
+        .data-badge { min-width:0 !important; padding:6px !important; border-radius:9px !important; }
+        .data-badge .tiny { font-size:7.5px !important; }
+        .data-badge .big { font-size:9.5px !important; }
+
+        div[data-testid="stSelectbox"] {
+            width: 42% !important;
+            margin: 0 0 var(--m-gap) 0 !important;
+        }
+        div[data-testid="stSelectbox"] label { font-size:10.5px !important; margin-bottom:1px !important; }
+        div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+            min-height:38px !important;
+            height:38px !important;
+            font-size:11px !important;
+            border-radius:9px !important;
+        }
+
+        .st-key-top_kpi [data-testid="stHorizontalBlock"] {
+            flex-wrap:nowrap !important;
+            gap:var(--m-gap) !important;
+            align-items:stretch !important;
+        }
+        .st-key-top_kpi [data-testid="stColumn"]:first-child {
+            flex:.72 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+        .st-key-top_kpi [data-testid="stColumn"]:last-child {
+            flex:1 1 0 !important; width:0 !important; min-width:0 !important;
+        }
+
+        .section-title { font-size:var(--m-title) !important; line-height:1.1 !important; font-weight:750 !important; }
+        .date-line { font-size:7.7px !important; line-height:1.15 !important; margin-top:4px !important; white-space:normal !important; }
+
+        .hero-card {
+            height:250px !important;
+            min-height:250px !important;
+            padding:11px 10px !important;
+        }
+        .hero-value { font-size:27px !important; margin:23px 0 10px !important; }
+        .hero-growth { font-size:19px !important; gap:6px !important; }
+        .hero-growth span.note { font-size:7.5px !important; line-height:1.15 !important; }
+        .sparkline-wrap { margin-top:14px !important; height:63px !important; }
+
+        .side-card,
+        .flow-card {
+            height:119px !important;
+            min-height:119px !important;
+            padding:9px !important;
+        }
+        .kpi-big { font-size:24px !important; margin:4px 0 2px !important; }
+        .achievement-gap { font-size:9px !important; white-space:nowrap !important; }
+        .kpi-grid3, .flow-grid { margin-top:4px !important; border-radius:7px !important; }
+        .kpi-cell, .flow-cell { padding:5px 4px !important; }
+        .kpi-label, .flow-title { font-size:var(--m-kpi-label) !important; line-height:1.1 !important; }
+        .kpi-value { font-size:var(--m-kpi-value) !important; line-height:1.1 !important; }
+        .flow-value { font-size:11.5px !important; line-height:1.05 !important; }
+        .flow-share { font-size:9.5px !important; margin-top:3px !important; }
+        .mini-bar { height:5px !important; margin-top:3px !important; }
+
+        .ytd-card { padding:9px 10px !important; min-height:88px !important; }
+        .section-title-row { margin-bottom:4px !important; }
+        .period-label { font-size:8px !important; line-height:1.1 !important; }
+        .ytd-metrics { margin-top:3px !important; }
+        .ytd-item { padding:6px 5px 1px !important; }
+        .ytd-label { font-size:7px !important; }
+        .ytd-value { font-size:11px !important; white-space:nowrap !important; }
+
+        .st-key-monthly_trend_card {
+            border:1px solid var(--stroke) !important;
+            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
+            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05) !important;
+            padding:10px 10px 5px !important;
+            margin-top:0 !important;
+        }
+        .st-key-monthly_trend_card [data-testid="stVerticalBlock"] { gap:0 !important; }
+        .st-key-monthly_trend_card [data-testid="stPlotlyChart"] { margin-top:-2px !important; }
+
+        .table-head, .bar-row {
+            grid-template-columns:2.05fr 2.55fr 1.42fr .55fr !important;
+            gap:4px !important;
+        }
+        .table-head { font-size:7.2px !important; padding-bottom:4px !important; margin-bottom:4px !important; }
+        .bar-row { min-height:22px !important; font-size:var(--m-body) !important; }
+        .bar-name,.bar-amount,.bar-share { font-size:var(--m-body) !important; }
+        .bar-track { height:9px !important; }
+
+        .st-key-product_card,
+        .st-key-account_card {
+            border:1px solid var(--stroke) !important;
+            background:linear-gradient(135deg, rgba(14,57,99,.98), rgba(4,26,50,.98)) !important;
+            box-shadow:inset 0 0 26px rgba(14,115,190,.08),0 0 18px rgba(0,168,255,.05) !important;
+            padding:9px 10px 8px !important;
+            margin-top:0 !important;
         }
         .st-key-product_card [data-testid="stVerticalBlock"],
-        .st-key-account_card [data-testid="stVerticalBlock"] {
-            gap: 2px !important;
-        }
+        .st-key-account_card [data-testid="stVerticalBlock"] { gap:2px !important; }
 
-        /* product header = title | toggle | month */
-        .st-key-product_header [data-testid="stHorizontalBlock"] {
-            flex-wrap: nowrap !important;
-            gap: 4px !important;
-            align-items: center !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(1) {
-            flex: 1.55 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(2) {
-            flex: 1.45 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-        .st-key-product_header [data-testid="stColumn"]:nth-child(3) {
-            flex: .60 1 0 !important; width:0 !important; min-width:0 !important;
-        }
-
-        /* account header = title | toggle | month */
+        .st-key-product_header [data-testid="stHorizontalBlock"],
         .st-key-account_header [data-testid="stHorizontalBlock"] {
-            flex-wrap: nowrap !important;
-            gap: 4px !important;
-            align-items: center !important;
+            flex-wrap:nowrap !important;
+            gap:5px !important;
+            align-items:center !important;
         }
+        .st-key-product_header [data-testid="stColumn"]:nth-child(1),
         .st-key-account_header [data-testid="stColumn"]:nth-child(1) {
-            flex: 1.45 1 0 !important; width:0 !important; min-width:0 !important;
+            flex:1.75 1 0 !important; width:0 !important; min-width:0 !important;
         }
+        .st-key-product_header [data-testid="stColumn"]:nth-child(2),
         .st-key-account_header [data-testid="stColumn"]:nth-child(2) {
-            flex: 1.60 1 0 !important; width:0 !important; min-width:0 !important;
+            flex:1.20 1 0 !important; width:0 !important; min-width:0 !important;
         }
+        .st-key-product_header [data-testid="stColumn"]:nth-child(3),
         .st-key-account_header [data-testid="stColumn"]:nth-child(3) {
-            flex: .55 1 0 !important; width:0 !important; min-width:0 !important;
+            flex:.55 1 0 !important; width:0 !important; min-width:0 !important;
         }
 
-        div[data-testid="stSegmentedControl"] {
-            margin: 0 !important;
-        }
+        div[data-testid="stSegmentedControl"] { margin:0 !important; width:100% !important; }
         div[data-testid="stSegmentedControl"] > div {
-            justify-content: flex-end !important;
-            gap: 0 !important;
+            justify-content:flex-end !important;
+            gap:0 !important;
+            width:100% !important;
         }
         div[data-testid="stSegmentedControl"] button {
-            min-height: 25px !important;
-            height: 25px !important;
-            padding: 2px 7px !important;
-            font-size: 7.5px !important;
-            line-height: 1 !important;
-            border-radius: 5px !important;
+            min-height:23px !important;
+            height:23px !important;
+            padding:2px 5px !important;
+            font-size:7px !important;
+            line-height:1 !important;
+            border-radius:5px !important;
+            white-space:nowrap !important;
+            overflow:visible !important;
+            text-overflow:clip !important;
         }
 
         .product-row {
-            grid-template-columns: 1.78fr 2.50fr 1.42fr !important;
-            gap: 4px !important;
-            min-height: 24px !important;
-            font-size: 8.5px !important;
+            grid-template-columns:1.78fr 2.48fr 1.42fr !important;
+            gap:4px !important;
+            min-height:23px !important;
+            font-size:8.2px !important;
         }
         .account-row {
-            grid-template-columns: 1.45fr 2.65fr 1.45fr !important;
-            gap: 4px !important;
-            min-height: 24px !important;
-            font-size: 8.5px !important;
+            grid-template-columns:1.45fr 2.62fr 1.45fr !important;
+            gap:4px !important;
+            min-height:23px !important;
+            font-size:8.2px !important;
         }
 
-        /* INSIGHTS */
         .insight-grid {
-            grid-template-columns: repeat(4,1fr) !important;
-            gap: 5px !important;
-            margin-top: 8px !important;
+            grid-template-columns:repeat(4,1fr) !important;
+            gap:5px !important;
+            margin-top:7px !important;
         }
         .insight {
-            min-height: 88px !important;
-            padding: 7px 6px !important;
-            gap: 4px !important;
-            font-size: 7.5px !important;
-            line-height: 1.22 !important;
+            min-height:82px !important;
+            padding:6px 5px !important;
+            gap:4px !important;
+            font-size:7.1px !important;
+            line-height:1.2 !important;
         }
         .insight-no {
-            width: 21px !important;
-            height: 21px !important;
-            min-width: 21px !important;
-            font-size: 9px !important;
+            width:20px !important;
+            height:20px !important;
+            min-width:20px !important;
+            font-size:8.5px !important;
         }
 
-        /* ADMIN / FOOTER */
         [data-testid="stPopover"] button {
-            min-height: 34px !important;
-            font-size: 11px !important;
+            min-height:32px !important;
+            font-size:10px !important;
         }
     }
     </style>
@@ -1032,7 +909,7 @@ def make_monthly_chart(direct_df, target_df, year, selected_month_num):
         hovertemplate="%{x}<br>Target: Rp %{y:,.0f}<extra></extra>",
     ))
     fig.update_layout(
-        height=275,
+        height=258,
         margin=dict(l=2, r=2, t=3, b=1),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
@@ -1248,7 +1125,7 @@ with st.container(key="top_kpi"):
             """,
             unsafe_allow_html=True,
         )
-        st.markdown('<div style="height:8px"></div>', unsafe_allow_html=True)
+        st.markdown('<div style="height:10px"></div>', unsafe_allow_html=True)
         st.markdown(
             f"""
             <div class="card flow-card">
@@ -1331,7 +1208,7 @@ st.markdown(
     f"""
     <div class="card section-card">
       <div class="section-title-row">
-        <div class="section-title" style="font-size:13px">▦ &nbsp;Sales by Customer <span style="font-size:9px;font-weight:400">(Direct Channel)</span></div>
+        <div class="section-title">▦ &nbsp;Sales by Customer <span style="font-size:8px;font-weight:400">(Direct Channel)</span></div>
         <div class="period-label">{selected_month} {selected_year}</div>
       </div>
       <div class="table-head">
@@ -1351,20 +1228,20 @@ with st.container(key="product_card"):
     with st.container(key="product_header"):
         ph1, ph2, ph3 = st.columns([2.4, 1.65, .75], gap="small")
         with ph1:
-            st.markdown('<div class="section-title" style="font-size:13px">◇ &nbsp;Sales by Product</div>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">◇ &nbsp;Sales by Product</div>', unsafe_allow_html=True)
         with ph2:
             if hasattr(st, "segmented_control"):
                 product_mode = st.segmented_control(
                     "Sales by Product metric",
-                    options=["By Value", "By Qty"],
-                    default="By Value",
+                    options=["Value", "Quantity"],
+                    default="Value",
                     label_visibility="collapsed",
                     key="product_mode",
                 )
             else:
                 product_mode = st.radio(
                     "Sales by Product metric",
-                    ["By Value", "By Qty"],
+                    ["Value", "Quantity"],
                     horizontal=True,
                     label_visibility="collapsed",
                     key="product_mode",
@@ -1372,7 +1249,7 @@ with st.container(key="product_card"):
         with ph3:
             st.markdown(f'<div class="period-label" style="text-align:right;padding-top:6px">{selected_month} {selected_year}</div>', unsafe_allow_html=True)
 
-    metric_col = "SALES VALUE" if product_mode == "By Value" else "SALES QUANTITY"
+    metric_col = "SALES VALUE" if product_mode == "Value" else "SALES QUANTITY"
     prod = (
         direct_month.groupby("SKU NAME", as_index=False)[metric_col]
         .sum()
@@ -1390,7 +1267,7 @@ with st.container(key="product_card"):
     product_rows_html = horizontal_rows(
         prod_rows,
         "value",
-        fmt_rp if product_mode == "By Value" else fmt_qty,
+        fmt_rp if product_mode == "Value" else fmt_qty,
     )
     st.markdown(product_rows_html if product_rows_html else '<div class="muted">No data.</div>', unsafe_allow_html=True)
 
@@ -1402,20 +1279,20 @@ with st.container(key="account_card"):
     with st.container(key="account_header"):
         ah1, ah2, ah3 = st.columns([2.4, 1.65, .75], gap="small")
         with ah1:
-            st.markdown('<div class="section-title" style="font-size:13px">▦ &nbsp;Account Performance</div>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">▦ &nbsp;Account Performance</div>', unsafe_allow_html=True)
         with ah2:
             if hasattr(st, "segmented_control"):
                 account_mode = st.segmented_control(
                     "Account Performance metric",
-                    options=["Sales Amount", "Sales Quantity"],
-                    default="Sales Amount",
+                    options=["Value", "Quantity"],
+                    default="Value",
                     label_visibility="collapsed",
                     key="account_mode",
                 )
             else:
                 account_mode = st.radio(
                     "Account Performance metric",
-                    ["Sales Amount", "Sales Quantity"],
+                    ["Value", "Quantity"],
                     horizontal=True,
                     label_visibility="collapsed",
                     key="account_mode",
@@ -1423,7 +1300,7 @@ with st.container(key="account_card"):
         with ah3:
             st.markdown(f'<div class="period-label" style="text-align:right;padding-top:6px">{selected_month} {selected_year}</div>', unsafe_allow_html=True)
 
-    acc_metric = "SALES VALUE" if account_mode == "Sales Amount" else "SALES QUANTITY"
+    acc_metric = "SALES VALUE" if account_mode == "Value" else "SALES QUANTITY"
     account_rows = []
     for key, display in ACCOUNT_FIXED:
         if key == "__MTI__":
@@ -1439,7 +1316,7 @@ with st.container(key="account_card"):
     account_rows_html = horizontal_rows(
         account_rows,
         "value",
-        fmt_rp if account_mode == "Sales Amount" else fmt_qty,
+        fmt_rp if account_mode == "Value" else fmt_qty,
     )
     st.markdown(account_rows_html, unsafe_allow_html=True)
 
@@ -1520,7 +1397,7 @@ with st.popover("🔐 Admin", use_container_width=False):
 st.markdown(
     """
     <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
-      BUILD V6 — 9 SEP 2026
+      BUILD V7 — 14 SEP 2026
     </div>
     """,
     unsafe_allow_html=True,
