@@ -420,7 +420,7 @@ st.markdown(
 
     @media (max-width: 720px) {
         :root {
-            --m-gap: 10px;
+            --m-gap: 10px; /* locked global card gap */
             --m-radius: 11px;
             --m-title: 13px;
             --m-body: 8.5px;
@@ -490,19 +490,19 @@ st.markdown(
         .date-line { font-size:7.7px !important; line-height:1.15 !important; margin-top:4px !important; white-space:normal !important; }
 
         .hero-card {
-            height:250px !important;
-            min-height:250px !important;
+            height:242px !important;
+            min-height:242px !important;
             padding:11px 10px !important;
         }
-        .hero-value { font-size:27px !important; margin:23px 0 10px !important; }
+        .hero-value { font-size:27px !important; margin:20px 0 9px !important; }
         .hero-growth { font-size:19px !important; gap:6px !important; }
         .hero-growth span.note { font-size:7.5px !important; line-height:1.15 !important; }
         .sparkline-wrap { margin-top:14px !important; height:63px !important; }
 
         .side-card,
         .flow-card {
-            height:119px !important;
-            min-height:119px !important;
+            height:115px !important;
+            min-height:115px !important;
             padding:9px !important;
         }
         .kpi-big { font-size:24px !important; margin:4px 0 2px !important; }
@@ -521,7 +521,7 @@ st.markdown(
         .ytd-metrics { margin-top:3px !important; }
         .ytd-item { padding:6px 5px 1px !important; }
         .ytd-label { font-size:7px !important; }
-        .ytd-value { font-size:11px !important; white-space:nowrap !important; }
+        .ytd-value { font-size:11.2px !important; white-space:nowrap !important; }
 
         .st-key-monthly_trend_card {
             border:1px solid var(--stroke) !important;
@@ -565,11 +565,11 @@ st.markdown(
         }
         .st-key-product_header [data-testid="stColumn"]:nth-child(2),
         .st-key-account_header [data-testid="stColumn"]:nth-child(2) {
-            flex:1.20 1 0 !important; width:0 !important; min-width:0 !important;
+            flex:1.34 1 0 !important; width:0 !important; min-width:0 !important;
         }
         .st-key-product_header [data-testid="stColumn"]:nth-child(3),
         .st-key-account_header [data-testid="stColumn"]:nth-child(3) {
-            flex:.55 1 0 !important; width:0 !important; min-width:0 !important;
+            flex:.48 1 0 !important; width:0 !important; min-width:0 !important;
         }
 
         div[data-testid="stSegmentedControl"] { margin:0 !important; width:100% !important; }
@@ -579,10 +579,10 @@ st.markdown(
             width:100% !important;
         }
         div[data-testid="stSegmentedControl"] button {
-            min-height:23px !important;
-            height:23px !important;
-            padding:2px 5px !important;
-            font-size:7px !important;
+            min-height:21px !important;
+            height:21px !important;
+            padding:1px 5px !important;
+            font-size:6.6px !important;
             line-height:1 !important;
             border-radius:5px !important;
             white-space:nowrap !important;
@@ -594,13 +594,13 @@ st.markdown(
             grid-template-columns:1.78fr 2.48fr 1.42fr !important;
             gap:4px !important;
             min-height:23px !important;
-            font-size:8.2px !important;
+            font-size:8.4px !important;
         }
         .account-row {
             grid-template-columns:1.45fr 2.62fr 1.45fr !important;
             gap:4px !important;
             min-height:23px !important;
-            font-size:8.2px !important;
+            font-size:8.4px !important;
         }
 
         .insight-grid {
@@ -609,11 +609,11 @@ st.markdown(
             margin-top:7px !important;
         }
         .insight {
-            min-height:82px !important;
+            min-height:92px !important;
             padding:6px 5px !important;
             gap:4px !important;
-            font-size:7.1px !important;
-            line-height:1.2 !important;
+            font-size:7.7px !important;
+            line-height:1.24 !important;
         }
         .insight-no {
             width:20px !important;
@@ -1397,7 +1397,7 @@ with st.popover("🔐 Admin", use_container_width=False):
 st.markdown(
     """
     <div style="text-align:center;color:#5f7f9b;font-size:10px;margin-top:10px;margin-bottom:4px">
-      BUILD V7 — 14 SEP 2026
+      BUILD V8 — 14 SEP 2026
     </div>
     """,
     unsafe_allow_html=True,
