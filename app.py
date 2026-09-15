@@ -440,7 +440,7 @@ select{width:100%;height:44px;border-radius:9px;border:1px solid #343946;backgro
 <div class="card ctrl-card"><div class="ctrl-head"><div class="ctrl-title-wrap"><div class="title">◇ &nbsp;Sales by Product</div><div class="period" id="productPeriod"></div></div><div class="toggle"><button id="prodValue" class="active">Value</button><button id="prodQty">Quantity</button></div></div><div id="productRows"></div></div>
 <div class="card ctrl-card"><div class="ctrl-head"><div class="ctrl-title-wrap"><div class="title">▦ &nbsp;Account Performance</div><div class="period" id="accountPeriod"></div></div><div class="toggle"><button id="accValue" class="active">Value</button><button id="accQty">Quantity</button></div></div><div id="accountRows"></div></div>
 <div class="card section insights"><div class="title">💡 &nbsp;Insights</div><div class="insight-grid" id="insightRows"></div></div>
-<div class="build">BUILD V19 NUMBER UNITS — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
+<div class="build">BUILD V20 TREND LABELS — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
 </div>
 <script>
 const DATA=__DATA__,MONTHS=__MONTHS__;let selectedMonth="__DEFAULT__",productMetric="value",accountMetric="value";
@@ -449,7 +449,52 @@ function rp(v){const s=v<0?"-":"",a=Math.abs(v||0);if(a>=1e9)return `${s}Rp ${(a
 function qty(v){const a=Math.abs(v||0);if(a>=1e6)return (v/1e6).toFixed(2)+" M";if(a>=1e3)return (v/1e3).toFixed(1)+" K";return Math.round(v).toLocaleString();}
 function pct(v){return `${Math.round(v||0)}%`;}
 function sparkline(vals){const w=150,h=62,p=4;if(!vals||!vals.length)vals=[0,0];let lo=Math.min(...vals),hi=Math.max(...vals);if(hi===lo)hi=lo+1;const pts=vals.map((v,i)=>{const x=p+(w-p*2)*(i/Math.max(1,vals.length-1));const y=h-p-(h-p*2)*((v-lo)/(hi-lo));return[x,y]});const path=pts.map(x=>x.join(",")).join(" "),last=pts[pts.length-1];return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${path}" fill="none" stroke="#1bc7ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3.2" fill="#21dbff"/></svg>`;}
-function trendSvg(d){const labels=d.trend_months,actual=d.trend_actual,target=d.trend_target,w=350,h=220,left=36,right=8,top=14,bottom=28,cw=w-left-right,ch=h-top-bottom,maxv=Math.max(1,...actual,...target)*1.12,n=labels.length,step=cw/Math.max(n,1),barW=Math.min(24,step*.55);let bars="",xl="",grid="",lp="",cir="";[0,.25,.5,.75,1].forEach(fr=>{const y=top+ch*(1-fr),val=maxv*fr;grid+=`<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="rgba(111,164,207,.18)" stroke-width="1"/><text x="${left-5}" y="${y+3}" fill="#b8cce0" font-size="8" text-anchor="end">${val>=1e9?(val/1e9).toFixed(1)+"m":Math.round(val/1e6)+"jt"}</text>`});labels.forEach((lab,i)=>{const cx=left+step*(i+.5),bh=ch*(actual[i]/maxv),y=top+ch-bh,ty=top+ch-ch*(target[i]/maxv);bars+=`<rect x="${cx-barW/2}" y="${y}" width="${barW}" height="${bh}" rx="1.5" fill="#18bfff" stroke="#22c9ff" stroke-width=".7"/>`;xl+=`<text x="${cx}" y="${h-9}" fill="#d6e4f1" font-size="8" text-anchor="middle">${lab}</text>`;lp+=`${cx},${ty} `;cir+=`<circle cx="${cx}" cy="${ty}" r="3" fill="#edf7ff"/>`});return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${grid}${bars}<polyline points="${lp}" fill="none" stroke="#edf7ff" stroke-width="2" stroke-dasharray="6 5"/>${cir}${xl}</svg>`;}
+function trendSvg(d){
+  const labels=d.trend_months,actual=d.trend_actual,target=d.trend_target,
+        w=350,h=220,left=36,right=8,top=14,bottom=28,
+        cw=w-left-right,ch=h-top-bottom,
+        maxv=Math.max(1,...actual,...target)*1.16,
+        n=labels.length,step=cw/Math.max(n,1),barW=Math.min(24,step*.55);
+
+  let bars="",xl="",grid="",lp="",cir="",barLabels="",lineLabels="";
+
+  [0,.25,.5,.75,1].forEach(fr=>{
+    const y=top+ch*(1-fr),val=maxv*fr;
+    grid+=`<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="rgba(111,164,207,.18)" stroke-width="1"/>
+           <text x="${left-5}" y="${y+3}" fill="#b8cce0" font-size="8" text-anchor="end">${val>=1e9?(val/1e9).toFixed(1)+"m":Math.round(val/1e6)+"jt"}</text>`;
+  });
+
+  labels.forEach((lab,i)=>{
+    const cx=left+step*(i+.5),
+          bh=ch*(actual[i]/maxv),
+          y=top+ch-bh,
+          ty=top+ch-ch*(target[i]/maxv),
+          actualJt=Math.round(actual[i]/1e6),
+          targetJt=Math.round(target[i]/1e6);
+
+    bars+=`<rect x="${cx-barW/2}" y="${y}" width="${barW}" height="${bh}" rx="1.5" fill="#18bfff" stroke="#22c9ff" stroke-width=".7"/>`;
+
+    /* Actual value: anchored near the bottom end of each bar */
+    barLabels+=`<text x="${cx}" y="${top+ch-6}" fill="#ffffff" font-size="6.8" font-weight="700" text-anchor="middle">${actualJt}jt</text>`;
+
+    /* Target value: directly above each line marker */
+    lineLabels+=`<text x="${cx}" y="${Math.max(top+8,ty-8)}" fill="#edf7ff" font-size="6.8" font-weight="700" text-anchor="middle">${targetJt}jt</text>`;
+
+    xl+=`<text x="${cx}" y="${h-9}" fill="#d6e4f1" font-size="8" text-anchor="middle">${lab}</text>`;
+    lp+=`${cx},${ty} `;
+    cir+=`<circle cx="${cx}" cy="${ty}" r="3" fill="#edf7ff"/>`;
+  });
+
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    ${grid}
+    ${bars}
+    ${barLabels}
+    <polyline points="${lp}" fill="none" stroke="#edf7ff" stroke-width="2" stroke-dasharray="6 5"/>
+    ${cir}
+    ${lineLabels}
+    ${xl}
+  </svg>`;
+}
 function customerRows(rows){const max=Math.max(1,...rows.map(r=>r.value));return rows.map((r,i)=>`<div class="customer-row"><div class="name">${r.name}</div><div class="bar"><div class="barfill ${colors[Math.min(i,5)]}" style="width:${Math.max(0,r.value/max*100)}%"></div></div><div class="amount">${rp(r.value)}</div><div class="share">${Math.round(r.share)}%</div></div>`).join("");}
 function metricRows(rows,metric,type){const max=Math.max(1,...rows.map(r=>r.value)),cls=type==="product"?"product-row":"account-row";return rows.map((r,i)=>`<div class="${cls}"><div class="name">${r.name}</div><div class="bar"><div class="barfill ${colors[Math.min(i,5)]}" style="width:${Math.max(0,r.value/max*100)}%"></div></div><div class="amount">${metric==="value"?rp(r.value):qty(r.value)} (${Math.round(r.share)}%)</div></div>`).join("");}
 function render(){const d=DATA[selectedMonth];document.getElementById("mtdCurrentDate").innerText=`1 – ${d.latest_day} ${d.month} ${d.year}`;document.getElementById("mtdCompare").innerText=`1 – ${d.latest_day} ${d.month} ${d.year} | vs 1 – ${d.previous_day} ${d.previous_month} ${d.previous_year}`;document.getElementById("mtdActual").innerText=rp(d.mtd_actual);const g=d.growth||0,gv=document.getElementById("growthValue");gv.innerText=`${g>=0?"▲":"▼"} ${g>=0?"+":""}${g.toFixed(1)}%`;gv.style.color=g>=0?"#20e5b0":"#ff5d66";document.getElementById("mtdAch").innerText=pct(d.mtd_achievement);const gp=d.mtd_target?d.mtd_gap/d.mtd_target*100:0;document.getElementById("mtdGapPct").innerText=`${gp>=0?"▲":"▼"} ${gp>=0?"+":""}${gp.toFixed(1)}% (Gap)`;document.getElementById("achActual").innerText=rp(d.mtd_actual);document.getElementById("achTarget").innerText=rp(d.mtd_target);document.getElementById("achGap").innerText=rp(d.mtd_gap);document.getElementById("distVal").innerText=rp(d.sales_to_distributor);document.getElementById("storeVal").innerText=rp(d.sales_to_stores);document.getElementById("distShare").innerText=pct(d.distributor_share);document.getElementById("storeShare").innerText=pct(d.stores_share);document.getElementById("distBar").style.width=`${d.distributor_share}%`;document.getElementById("storeBar").style.width=`${d.stores_share}%`;document.getElementById("ytdPeriod").innerText=`Jan – ${d.month} ${d.year}`;document.getElementById("ytdActual").innerText=rp(d.ytd_actual);document.getElementById("ytdTarget").innerText=rp(d.ytd_target);document.getElementById("ytdGap").innerText=rp(d.ytd_gap);document.getElementById("ytdAch").innerText=pct(d.ytd_achievement);document.getElementById("trendChart").innerHTML=trendSvg(d);document.getElementById("customerPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("customerRows").innerHTML=customerRows(d.customers);document.getElementById("productPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("productRows").innerHTML=metricRows(d.products[productMetric],productMetric,"product");document.getElementById("accountPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("accountRows").innerHTML=metricRows(d.accounts[accountMetric],accountMetric,"account");document.getElementById("insightRows").innerHTML=d.insights.map((x,i)=>`<div class="insight"><div class="no">${i+1}</div><div>${x}</div></div>`).join("");}
