@@ -59,7 +59,7 @@ st.markdown('''
 .block-container {max-width:430px!important;padding:0!important;margin:0 auto!important;}
 #MainMenu,header,footer{visibility:hidden;}
 div[data-testid="stVerticalBlock"]{gap:8px!important;}
-div[data-testid="stPopover"]{margin:0 10px 16px 10px!important;}
+div[data-testid="stPopover"]{margin:0 10px 20px 10px!important;}
 </style>
 ''', unsafe_allow_html=True)
 
@@ -380,28 +380,28 @@ body{display:flex;justify-content:center}
 .subhead{font-size:14px;font-weight:300;color:#dce9f5;margin-top:4px;line-height:1}
 .datebadge{border:1px solid var(--stroke);border-radius:9px;padding:6px;text-align:center;background:linear-gradient(180deg,#0b3159,#061e39)}
 .datebadge .tiny{font-size:7.5px;color:var(--muted)} .datebadge .big{font-size:10px;font-weight:800;margin-top:2px}
-.filter-label{font-size:11px;margin-bottom:3px}
-select{width:42%;height:38px;border-radius:9px;border:1px solid #343946;background:#242731;color:#fff;padding:0 12px;font-size:11px;outline:none;margin-bottom:10px}
-.grid-top{display:grid;grid-template-columns:42% 1fr;gap:10px;align-items:stretch}
-.stack-right{display:grid;grid-template-rows:115px 115px;gap:10px}
+.filter-label{font-size:11px;margin:0}.month-row{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;margin-bottom:10px}
+select{width:100%;height:38px;border-radius:9px;border:1px solid #343946;background:#242731;color:#fff;padding:0 12px;font-size:11px;outline:none;margin-bottom:0}
+.grid-top{display:grid;grid-template-columns:44% 1fr;gap:10px;align-items:stretch}
+.stack-right{display:grid;grid-template-rows:119px 119px;gap:10px}
 .card{border:1px solid var(--stroke);border-radius:var(--radius);background:linear-gradient(135deg,#0c3b69,#061e3a);box-shadow:inset 0 0 20px rgba(14,115,190,.08);overflow:hidden}
-.hero{height:240px;padding:11px 10px;background:radial-gradient(circle at 80% 5%,rgba(16,201,255,.22),transparent 34%),linear-gradient(135deg,#095396,#061f3f)}
-.achievement,.flow{height:115px;padding:9px}
+.hero{height:248px;padding:11px 10px;background:radial-gradient(circle at 80% 5%,rgba(16,201,255,.22),transparent 34%),linear-gradient(135deg,#095396,#061f3f)}
+.achievement,.flow{height:119px;padding:9px}
 .title{font-size:13px;font-weight:750;line-height:1.08}
 .dates{font-size:7.5px;color:#dce8f2;margin-top:4px;line-height:1.15}
-.hero-value{font-size:27px;font-weight:800;margin:22px 0 10px;line-height:1}
+.hero-value{font-size:25px;font-weight:800;margin:22px 0 10px;line-height:1;white-space:nowrap;letter-spacing:-.02em}
 .growth{font-size:19px;font-weight:800;color:var(--green);display:flex;gap:6px;align-items:center}
 .growth small{font-size:7.5px;color:#dce8f2;font-weight:400;line-height:1.15}
-.spark{height:62px;margin-top:13px}.spark svg{width:100%;height:100%}
-.ach-row{display:flex;align-items:center;justify-content:center;gap:10px}
+.compare-period{font-size:7.2px;color:#dce8f2;margin-top:10px;padding-top:5px;border-top:1px solid rgba(142,191,230,.18);white-space:nowrap}.hero-illustration{height:62px;margin-top:9px;border-radius:8px;background:linear-gradient(135deg,rgba(22,126,210,.18),rgba(6,31,58,.20));display:flex;align-items:center;justify-content:center;gap:10px;opacity:.9}.store-icon{font-size:28px;color:#27caff}.store-lines{display:flex;flex-direction:column;gap:5px;width:62%}.store-lines span{display:block;height:5px;border-radius:999px;background:linear-gradient(90deg,rgba(26,192,255,.78),rgba(26,192,255,.10))}.store-lines span:nth-child(2){width:78%}.store-lines span:nth-child(3){width:58%}
+.ach-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px}
 .ach-big{font-size:24px;font-weight:800;line-height:1;margin:4px 0 2px}.gap-pct{font-size:9px;color:var(--red);white-space:nowrap}
-.kpi3{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:4px;background:rgba(1,18,35,.18)}
+.kpi3{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:12px;background:rgba(1,18,35,.18)}
 .kcell{padding:5px 4px;border-right:1px solid rgba(142,191,230,.26)}.kcell:last-child{border-right:none}
-.klab{font-size:7.6px;color:#dce8f2}.kval{font-size:9.8px;font-weight:750;margin-top:2px;white-space:nowrap}
+.klab{font-size:7px;color:#dce8f2}.kval{font-size:9.5px;font-weight:750;margin-top:2px;white-space:nowrap}
 .red{color:#ff5d66}.green{color:#20e5b0}
-.flowgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:5px}
+.flowgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:12px}
 .flowcell{padding:5px 4px;border-right:1px solid rgba(142,191,230,.26)}.flowcell:last-child{border-right:none}
-.flowlab{font-size:7.6px;color:#dce8f2}.flowval{font-size:11.8px;font-weight:750;margin-top:2px}
+.flowlab{font-size:7px;color:#dce8f2}.flowval{font-size:11.5px;font-weight:750;margin-top:2px}
 .flowshare{font-size:9.5px;font-weight:750;margin-top:4px}.track{height:5px;background:#163b61;border-radius:999px;overflow:hidden;margin-top:3px}
 .fill-blue{height:100%;background:linear-gradient(90deg,#188eff,#22c9ff)}.fill-green{height:100%;background:linear-gradient(90deg,#16c99b,#2cebb9)}
 .section{margin-top:10px;padding:10px 11px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
@@ -409,7 +409,7 @@ select{width:42%;height:38px;border-radius:9px;border:1px solid #343946;backgrou
 .ytd{min-height:88px}.ytdgrid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(102,164,213,.22)}
 .ycell{padding:7px 6px 1px;border-right:1px solid rgba(142,191,230,.26)}.ycell:last-child{border-right:none}
 .ylab{font-size:7px;color:#dce8f2}.yval{font-size:11px;font-weight:750;margin-top:3px;white-space:nowrap}
-.trend{height:282px}.chart-wrap{height:237px;margin-top:2px}.chart-wrap svg{width:100%;height:100%;display:block}
+.trend{height:270px}.chart-wrap{height:225px;margin-top:2px}.chart-wrap svg{width:100%;height:100%;display:block}
 .rows-head,.customer-row{display:grid;grid-template-columns:2.05fr 2.55fr 1.42fr .55fr;gap:4px;align-items:center}
 .rows-head{font-size:7px;color:#dce8f2;border-bottom:1px solid rgba(110,169,216,.25);padding-bottom:4px}
 .customer-row{min-height:22px;font-size:8.2px}.name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -421,15 +421,15 @@ select{width:42%;height:38px;border-radius:9px;border:1px solid #343946;backgrou
 .toggle button{border:0;background:#081d35;color:#dbe9f5;font-size:7px;padding:0 3px;cursor:pointer}.toggle button.active{background:linear-gradient(180deg,#1d7cff,#1768e6);color:#fff}
 .product-row{display:grid;grid-template-columns:1.78fr 2.48fr 1.42fr;gap:4px;align-items:center;min-height:23px;font-size:8.2px}
 .account-row{display:grid;grid-template-columns:1.45fr 2.62fr 1.45fr;gap:4px;align-items:center;min-height:23px;font-size:8.2px}
-.insights{min-height:148px}.insight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}
-.insight{min-height:103px;border:1px solid rgba(54,147,217,.55);background:rgba(8,48,86,.82);border-radius:8px;padding:8px 6px;display:flex;gap:4px;font-size:8px;line-height:1.28}
-.no{width:21px;height:21px;min-width:21px;border-radius:50%;background:#96ccff;color:#07264a;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:9px}
-.footer{color:#5f7589;font-size:7px;text-align:center;letter-spacing:.16em;margin-top:18px}.build{color:#4f687e;font-size:6.5px;text-align:center;margin-top:10px}
+.insights{min-height:136px}.insight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}
+.insight{min-height:92px;border:1px solid rgba(54,147,217,.55);background:rgba(8,48,86,.82);border-radius:8px;padding:7px 6px;display:flex;gap:4px;font-size:7.5px;line-height:1.22}
+.no{width:20px;height:20px;min-width:20px;border-radius:50%;background:#96ccff;color:#07264a;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:8.5px}
+.footer{color:#6f879d;font-size:8px;text-align:center;letter-spacing:.16em;margin-top:24px}.build{color:#56738d;font-size:7.5px;text-align:center;margin-top:12px}
 </style></head><body><div id="app">
 <div class="header"><img class="logo" src="data:image/png;base64,__LOGO__"/><div class="headcopy"><div class="headline">MODERN TRADE</div><div class="subhead">Sales Monitoring</div></div><div class="datebadge"><div class="tiny">Data per</div><div class="big">__LATEST__</div></div></div>
-<div class="filter-label">📅 Month</div><select id="monthSelect"></select>
+<div class="month-row"><div class="filter-label">📅 Month</div><select id="monthSelect"></select></div>
 <div class="grid-top">
-<div class="card hero"><div class="title">Sales – Month to Date</div><div class="dates" id="mtdDates"></div><div class="hero-value" id="mtdActual"></div><div class="growth"><span id="growthValue"></span><small>vs same period<br/>last month</small></div><div class="spark" id="spark"></div></div>
+<div class="card hero"><div class="title">Sales – Month to Date</div><div class="dates" id="mtdCurrentDate"></div><div class="hero-value" id="mtdActual"></div><div class="growth"><span id="growthValue"></span><small>vs same period<br/>last month</small></div><div class="compare-period" id="mtdCompare"></div><div class="hero-illustration"><div class="store-icon">▦</div><div class="store-lines"><span></span><span></span><span></span></div></div></div>
 <div class="stack-right">
 <div class="card achievement"><div class="title">🎯 &nbsp;Achievement</div><div class="ach-row"><div class="ach-big" id="mtdAch"></div><div class="gap-pct" id="mtdGapPct"></div></div><div class="kpi3"><div class="kcell"><div class="klab">Actual MTD</div><div class="kval" id="achActual"></div></div><div class="kcell"><div class="klab">Target MTD</div><div class="kval" id="achTarget"></div></div><div class="kcell"><div class="klab">Gap</div><div class="kval red" id="achGap"></div></div></div></div>
 <div class="card flow"><div class="title">⇄ &nbsp;Sales Flow Breakdown</div><div class="flowgrid"><div class="flowcell"><div class="flowlab">Sales to Distributor</div><div class="flowval" id="distVal"></div><div class="flowshare" id="distShare"></div><div class="track"><div class="fill-blue" id="distBar"></div></div></div><div class="flowcell"><div class="flowlab">Sales to Stores</div><div class="flowval" id="storeVal"></div><div class="flowshare" id="storeShare"></div><div class="track"><div class="fill-green" id="storeBar"></div></div></div></div></div>
@@ -440,7 +440,7 @@ select{width:42%;height:38px;border-radius:9px;border:1px solid #343946;backgrou
 <div class="card ctrl-card"><div class="ctrl-head"><div class="title">◇ &nbsp;Sales by Product</div><div class="toggle"><button id="prodValue" class="active">Value</button><button id="prodQty">Quantity</button></div><div class="period" id="productPeriod"></div></div><div id="productRows"></div></div>
 <div class="card ctrl-card"><div class="ctrl-head"><div class="title">▦ &nbsp;Account Performance</div><div class="toggle"><button id="accValue" class="active">Value</button><button id="accQty">Quantity</button></div><div class="period" id="accountPeriod"></div></div><div id="accountRows"></div></div>
 <div class="card section insights"><div class="title">💡 &nbsp;Insights</div><div class="insight-grid" id="insightRows"></div></div>
-<div class="build">BUILD V11 POLISH — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
+<div class="build">BUILD V12 TOP REVISION — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
 </div>
 <script>
 const DATA=__DATA__,MONTHS=__MONTHS__;let selectedMonth="__DEFAULT__",productMetric="value",accountMetric="value";
@@ -452,7 +452,7 @@ function sparkline(vals){const w=150,h=62,p=4;if(!vals||!vals.length)vals=[0,0];
 function trendSvg(d){const labels=d.trend_months,actual=d.trend_actual,target=d.trend_target,w=350,h=220,left=36,right=8,top=14,bottom=28,cw=w-left-right,ch=h-top-bottom,maxv=Math.max(1,...actual,...target)*1.12,n=labels.length,step=cw/Math.max(n,1),barW=Math.min(24,step*.55);let bars="",xl="",grid="",lp="",cir="";[0,.25,.5,.75,1].forEach(fr=>{const y=top+ch*(1-fr),val=maxv*fr;grid+=`<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="rgba(111,164,207,.18)" stroke-width="1"/><text x="${left-5}" y="${y+3}" fill="#b8cce0" font-size="8" text-anchor="end">${val>=1e9?(val/1e9).toFixed(1)+"B":Math.round(val/1e6)+"M"}</text>`});labels.forEach((lab,i)=>{const cx=left+step*(i+.5),bh=ch*(actual[i]/maxv),y=top+ch-bh,ty=top+ch-ch*(target[i]/maxv);bars+=`<rect x="${cx-barW/2}" y="${y}" width="${barW}" height="${bh}" rx="1.5" fill="#18bfff" stroke="#22c9ff" stroke-width=".7"/>`;xl+=`<text x="${cx}" y="${h-9}" fill="#d6e4f1" font-size="8" text-anchor="middle">${lab}</text>`;lp+=`${cx},${ty} `;cir+=`<circle cx="${cx}" cy="${ty}" r="3" fill="#edf7ff"/>`});return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${grid}${bars}<polyline points="${lp}" fill="none" stroke="#edf7ff" stroke-width="2" stroke-dasharray="6 5"/>${cir}${xl}</svg>`;}
 function customerRows(rows){const max=Math.max(1,...rows.map(r=>r.value));return rows.map((r,i)=>`<div class="customer-row"><div class="name">${r.name}</div><div class="bar"><div class="barfill ${colors[Math.min(i,5)]}" style="width:${Math.max(0,r.value/max*100)}%"></div></div><div class="amount">${rp(r.value)}</div><div class="share">${Math.round(r.share)}%</div></div>`).join("");}
 function metricRows(rows,metric,type){const max=Math.max(1,...rows.map(r=>r.value)),cls=type==="product"?"product-row":"account-row";return rows.map((r,i)=>`<div class="${cls}"><div class="name">${r.name}</div><div class="bar"><div class="barfill ${colors[Math.min(i,5)]}" style="width:${Math.max(0,r.value/max*100)}%"></div></div><div class="amount">${metric==="value"?rp(r.value):qty(r.value)} (${Math.round(r.share)}%)</div></div>`).join("");}
-function render(){const d=DATA[selectedMonth];document.getElementById("mtdDates").innerText=`1 – ${d.latest_day} ${d.month} ${d.year} | vs 1 – ${d.previous_day} ${d.previous_month} ${d.previous_year}`;document.getElementById("mtdActual").innerText=rp(d.mtd_actual);const g=d.growth||0,gv=document.getElementById("growthValue");gv.innerText=`${g>=0?"▲":"▼"} ${g>=0?"+":""}${g.toFixed(1)}%`;gv.style.color=g>=0?"#20e5b0":"#ff5d66";document.getElementById("spark").innerHTML=sparkline(d.sparkline);document.getElementById("mtdAch").innerText=pct(d.mtd_achievement);const gp=d.mtd_target?d.mtd_gap/d.mtd_target*100:0;document.getElementById("mtdGapPct").innerText=`${gp>=0?"▲":"▼"} ${gp>=0?"+":""}${gp.toFixed(1)}% (Gap)`;document.getElementById("achActual").innerText=rp(d.mtd_actual);document.getElementById("achTarget").innerText=rp(d.mtd_target);document.getElementById("achGap").innerText=rp(d.mtd_gap);document.getElementById("distVal").innerText=rp(d.sales_to_distributor);document.getElementById("storeVal").innerText=rp(d.sales_to_stores);document.getElementById("distShare").innerText=pct(d.distributor_share);document.getElementById("storeShare").innerText=pct(d.stores_share);document.getElementById("distBar").style.width=`${d.distributor_share}%`;document.getElementById("storeBar").style.width=`${d.stores_share}%`;document.getElementById("ytdPeriod").innerText=`Jan – ${d.month} ${d.year}`;document.getElementById("ytdActual").innerText=rp(d.ytd_actual);document.getElementById("ytdTarget").innerText=rp(d.ytd_target);document.getElementById("ytdGap").innerText=rp(d.ytd_gap);document.getElementById("ytdAch").innerText=pct(d.ytd_achievement);document.getElementById("trendChart").innerHTML=trendSvg(d);document.getElementById("customerPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("customerRows").innerHTML=customerRows(d.customers);document.getElementById("productPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("productRows").innerHTML=metricRows(d.products[productMetric],productMetric,"product");document.getElementById("accountPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("accountRows").innerHTML=metricRows(d.accounts[accountMetric],accountMetric,"account");document.getElementById("insightRows").innerHTML=d.insights.map((x,i)=>`<div class="insight"><div class="no">${i+1}</div><div>${x}</div></div>`).join("");}
+function render(){const d=DATA[selectedMonth];document.getElementById("mtdCurrentDate").innerText=`1 – ${d.latest_day} ${d.month} ${d.year}`;document.getElementById("mtdCompare").innerText=`1 – ${d.latest_day} ${d.month} ${d.year} | vs 1 – ${d.previous_day} ${d.previous_month} ${d.previous_year}`;document.getElementById("mtdActual").innerText=rp(d.mtd_actual);const g=d.growth||0,gv=document.getElementById("growthValue");gv.innerText=`${g>=0?"▲":"▼"} ${g>=0?"+":""}${g.toFixed(1)}%`;gv.style.color=g>=0?"#20e5b0":"#ff5d66";document.getElementById("mtdAch").innerText=pct(d.mtd_achievement);const gp=d.mtd_target?d.mtd_gap/d.mtd_target*100:0;document.getElementById("mtdGapPct").innerText=`${gp>=0?"▲":"▼"} ${gp>=0?"+":""}${gp.toFixed(1)}% (Gap)`;document.getElementById("achActual").innerText=rp(d.mtd_actual);document.getElementById("achTarget").innerText=rp(d.mtd_target);document.getElementById("achGap").innerText=rp(d.mtd_gap);document.getElementById("distVal").innerText=rp(d.sales_to_distributor);document.getElementById("storeVal").innerText=rp(d.sales_to_stores);document.getElementById("distShare").innerText=pct(d.distributor_share);document.getElementById("storeShare").innerText=pct(d.stores_share);document.getElementById("distBar").style.width=`${d.distributor_share}%`;document.getElementById("storeBar").style.width=`${d.stores_share}%`;document.getElementById("ytdPeriod").innerText=`Jan – ${d.month} ${d.year}`;document.getElementById("ytdActual").innerText=rp(d.ytd_actual);document.getElementById("ytdTarget").innerText=rp(d.ytd_target);document.getElementById("ytdGap").innerText=rp(d.ytd_gap);document.getElementById("ytdAch").innerText=pct(d.ytd_achievement);document.getElementById("trendChart").innerHTML=trendSvg(d);document.getElementById("customerPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("customerRows").innerHTML=customerRows(d.customers);document.getElementById("productPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("productRows").innerHTML=metricRows(d.products[productMetric],productMetric,"product");document.getElementById("accountPeriod").innerText=`${d.month} ${d.year}`;document.getElementById("accountRows").innerHTML=metricRows(d.accounts[accountMetric],accountMetric,"account");document.getElementById("insightRows").innerHTML=d.insights.map((x,i)=>`<div class="insight"><div class="no">${i+1}</div><div>${x}</div></div>`).join("");}
 const sel=document.getElementById("monthSelect");MONTHS.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;if(m===selectedMonth)o.selected=true;sel.appendChild(o)});sel.addEventListener("change",e=>{selectedMonth=e.target.value;render()});
 document.getElementById("prodValue").onclick=()=>{productMetric="value";prodValue.classList.add("active");prodQty.classList.remove("active");render()};document.getElementById("prodQty").onclick=()=>{productMetric="quantity";prodQty.classList.add("active");prodValue.classList.remove("active");render()};document.getElementById("accValue").onclick=()=>{accountMetric="value";accValue.classList.add("active");accQty.classList.remove("active");render()};document.getElementById("accQty").onclick=()=>{accountMetric="quantity";accQty.classList.add("active");accValue.classList.remove("active");render()};render();
 </script></body></html>
