@@ -404,12 +404,12 @@ select{width:100%;height:44px;border-radius:9px;border:1px solid #343946;backgro
 .flowlab{font-size:7px;color:#dce8f2}.flowval{font-size:11.5px;font-weight:750;margin-top:2px}
 .flowshare{font-size:9.5px;font-weight:750;margin-top:4px}.track{height:5px;background:#163b61;border-radius:999px;overflow:hidden;margin-top:3px}
 .fill-blue{height:100%;background:linear-gradient(90deg,#188eff,#22c9ff)}.fill-green{height:100%;background:linear-gradient(90deg,#16c99b,#2cebb9)}
-.section{margin-top:10px;padding:10px 11px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.section{margin-top:10px;padding:9px 11px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
 .period{font-size:8px;color:#dbe8f3;white-space:nowrap}
-.ytd{min-height:88px}.ytdgrid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(102,164,213,.22)}
-.ycell{padding:7px 6px 1px;border-right:1px solid rgba(142,191,230,.26)}.ycell:last-child{border-right:none}
+.ytd{min-height:80px;padding-bottom:7px}.ytdgrid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(102,164,213,.22);padding-top:5px}
+.ycell{padding:5px 6px 0;border-right:1px solid rgba(142,191,230,.26)}.ycell:last-child{border-right:none}
 .ylab{font-size:7px;color:#dce8f2}.yval{font-size:11px;font-weight:750;margin-top:3px;white-space:nowrap}
-.trend{height:270px}.chart-wrap{height:225px;margin-top:2px}.chart-wrap svg{width:100%;height:100%;display:block}
+.trend{height:189px}.chart-wrap{height:151px;margin-top:0}.chart-wrap svg{width:100%;height:100%;display:block}
 .rows-head,.customer-row{display:grid;grid-template-columns:2.05fr 2.55fr 1.42fr .55fr;gap:4px;align-items:center}
 .rows-head{font-size:7px;color:#dce8f2;border-bottom:1px solid rgba(110,169,216,.25);padding-bottom:4px}
 .customer-row{min-height:22px;font-size:8.2px}.name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -440,7 +440,7 @@ select{width:100%;height:44px;border-radius:9px;border:1px solid #343946;backgro
 <div class="card ctrl-card"><div class="ctrl-head"><div class="title">◇ &nbsp;Sales by Product</div><div class="toggle"><button id="prodValue" class="active">Value</button><button id="prodQty">Quantity</button></div><div class="period" id="productPeriod"></div></div><div id="productRows"></div></div>
 <div class="card ctrl-card"><div class="ctrl-head"><div class="title">▦ &nbsp;Account Performance</div><div class="toggle"><button id="accValue" class="active">Value</button><button id="accQty">Quantity</button></div><div class="period" id="accountPeriod"></div></div><div id="accountRows"></div></div>
 <div class="card section insights"><div class="title">💡 &nbsp;Insights</div><div class="insight-grid" id="insightRows"></div></div>
-<div class="build">BUILD V15 TOP REFINEMENT — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
+<div class="build">BUILD V16 YTD TREND REVISION — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
 </div>
 <script>
 const DATA=__DATA__,MONTHS=__MONTHS__;let selectedMonth="__DEFAULT__",productMetric="value",accountMetric="value";
