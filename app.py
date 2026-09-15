@@ -383,24 +383,24 @@ body{display:flex;justify-content:center}
 .filter-label{font-size:11px;margin:0}.month-row{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;margin-bottom:10px}
 select{width:100%;height:38px;border-radius:9px;border:1px solid #343946;background:#242731;color:#fff;padding:0 12px;font-size:11px;outline:none;margin-bottom:0}
 .grid-top{display:grid;grid-template-columns:44% 1fr;gap:10px;align-items:stretch}
-.stack-right{display:grid;grid-template-rows:119px 119px;gap:10px}
+.stack-right{display:grid;grid-template-rows:117px 117px;gap:10px}
 .card{border:1px solid var(--stroke);border-radius:var(--radius);background:linear-gradient(135deg,#0c3b69,#061e3a);box-shadow:inset 0 0 20px rgba(14,115,190,.08);overflow:hidden}
-.hero{height:248px;padding:11px 10px;background:radial-gradient(circle at 80% 5%,rgba(16,201,255,.22),transparent 34%),linear-gradient(135deg,#095396,#061f3f)}
-.achievement,.flow{height:119px;padding:9px}
+.hero{height:244px;padding:11px 10px;background:radial-gradient(circle at 80% 5%,rgba(16,201,255,.22),transparent 34%),linear-gradient(135deg,#095396,#061f3f)}
+.achievement,.flow{height:117px;padding:9px}
 .title{font-size:13px;font-weight:750;line-height:1.08}
 .dates{font-size:7.5px;color:#dce8f2;margin-top:4px;line-height:1.15}
-.hero-value{font-size:25px;font-weight:800;margin:22px 0 10px;line-height:1;white-space:nowrap;letter-spacing:-.02em}
+.hero-value{font-size:25px;font-weight:800;margin:18px 0 9px;line-height:1;white-space:nowrap;letter-spacing:-.02em}
 .growth{font-size:19px;font-weight:800;color:var(--green);display:flex;gap:6px;align-items:center}
 .growth small{font-size:7.5px;color:#dce8f2;font-weight:400;line-height:1.15}
-.compare-period{font-size:7.2px;color:#dce8f2;margin-top:10px;padding-top:5px;border-top:1px solid rgba(142,191,230,.18);white-space:nowrap}.hero-illustration{height:62px;margin-top:9px;border-radius:8px;background:linear-gradient(135deg,rgba(22,126,210,.18),rgba(6,31,58,.20));display:flex;align-items:center;justify-content:center;gap:10px;opacity:.9}.store-icon{font-size:28px;color:#27caff}.store-lines{display:flex;flex-direction:column;gap:5px;width:62%}.store-lines span{display:block;height:5px;border-radius:999px;background:linear-gradient(90deg,rgba(26,192,255,.78),rgba(26,192,255,.10))}.store-lines span:nth-child(2){width:78%}.store-lines span:nth-child(3){width:58%}
-.ach-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px}
+.compare-period{font-size:7.2px;color:#dce8f2;margin-top:8px;padding-top:4px;border-top:1px solid rgba(142,191,230,.18);white-space:nowrap}.hero-illustration{height:60px;margin-top:8px;border-radius:8px;background:linear-gradient(135deg,rgba(22,126,210,.14),rgba(6,31,58,.16));display:grid;grid-template-columns:42px 1fr 34px;align-items:end;gap:8px;padding:8px 10px;opacity:.92}.store-icon{position:relative;width:38px;height:33px;border:1.5px solid rgba(39,202,255,.85);border-radius:4px 4px 2px 2px}.store-icon:before{content:"";position:absolute;left:-2px;top:-8px;width:40px;height:8px;border:1.5px solid rgba(39,202,255,.85);border-bottom:none;border-radius:4px 4px 0 0;background:repeating-linear-gradient(90deg,rgba(39,202,255,.75) 0 5px,transparent 5px 9px)}.store-icon:after{content:"";position:absolute;left:7px;bottom:0;width:10px;height:14px;border:1.5px solid rgba(39,202,255,.70);border-bottom:none}.store-lines{display:flex;flex-direction:column;gap:5px;align-self:center}.store-lines span{display:block;height:4px;border-radius:999px;background:linear-gradient(90deg,rgba(26,192,255,.72),rgba(26,192,255,.08))}.store-lines span:nth-child(1){width:92%}.store-lines span:nth-child(2){width:74%}.store-lines span:nth-child(3){width:55%}.carton-icon{position:relative;width:29px;height:25px;border:1.5px solid rgba(39,202,255,.72);transform:skewY(-8deg);margin-bottom:2px}.carton-icon:before{content:"";position:absolute;left:6px;top:-7px;width:19px;height:7px;border-left:1.5px solid rgba(39,202,255,.72);border-top:1.5px solid rgba(39,202,255,.72);transform:skewY(22deg)}
+.ach-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px}
 .ach-big{font-size:24px;font-weight:800;line-height:1;margin:4px 0 2px}.gap-pct{font-size:9px;color:var(--red);white-space:nowrap}
-.kpi3{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:12px;background:rgba(1,18,35,.18)}
+.kpi3{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:10px;background:rgba(1,18,35,.18)}
 .kcell{padding:5px 4px;border-right:1px solid rgba(142,191,230,.26)}.kcell:last-child{border-right:none}
 .klab{font-size:7px;color:#dce8f2}.kval{font-size:9.5px;font-weight:750;margin-top:2px;white-space:nowrap}
 .red{color:#ff5d66}.green{color:#20e5b0}
-.flowgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:12px}
-.flowcell{padding:5px 4px;border-right:1px solid rgba(142,191,230,.26)}.flowcell:last-child{border-right:none}
+.flowgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(92,160,214,.35);border-radius:7px;margin-top:10px}
+.flowcell{padding:5px 4px 4px;border-right:1px solid rgba(142,191,230,.26)}.flowcell:last-child{border-right:none}
 .flowlab{font-size:7px;color:#dce8f2}.flowval{font-size:11.5px;font-weight:750;margin-top:2px}
 .flowshare{font-size:9.5px;font-weight:750;margin-top:4px}.track{height:5px;background:#163b61;border-radius:999px;overflow:hidden;margin-top:3px}
 .fill-blue{height:100%;background:linear-gradient(90deg,#188eff,#22c9ff)}.fill-green{height:100%;background:linear-gradient(90deg,#16c99b,#2cebb9)}
@@ -429,7 +429,7 @@ select{width:100%;height:38px;border-radius:9px;border:1px solid #343946;backgro
 <div class="header"><img class="logo" src="data:image/png;base64,__LOGO__"/><div class="headcopy"><div class="headline">MODERN TRADE</div><div class="subhead">Sales Monitoring</div></div><div class="datebadge"><div class="tiny">Data per</div><div class="big">__LATEST__</div></div></div>
 <div class="month-row"><div class="filter-label">📅 Month</div><select id="monthSelect"></select></div>
 <div class="grid-top">
-<div class="card hero"><div class="title">Sales – Month to Date</div><div class="dates" id="mtdCurrentDate"></div><div class="hero-value" id="mtdActual"></div><div class="growth"><span id="growthValue"></span><small>vs same period<br/>last month</small></div><div class="compare-period" id="mtdCompare"></div><div class="hero-illustration"><div class="store-icon">▦</div><div class="store-lines"><span></span><span></span><span></span></div></div></div>
+<div class="card hero"><div class="title">Sales – Month to Date</div><div class="dates" id="mtdCurrentDate"></div><div class="hero-value" id="mtdActual"></div><div class="growth"><span id="growthValue"></span><small>vs same period<br/>last month</small></div><div class="compare-period" id="mtdCompare"></div><div class="hero-illustration"><div class="store-icon"></div><div class="store-lines"><span></span><span></span><span></span></div><div class="carton-icon"></div></div></div>
 <div class="stack-right">
 <div class="card achievement"><div class="title">🎯 &nbsp;Achievement</div><div class="ach-row"><div class="ach-big" id="mtdAch"></div><div class="gap-pct" id="mtdGapPct"></div></div><div class="kpi3"><div class="kcell"><div class="klab">Actual MTD</div><div class="kval" id="achActual"></div></div><div class="kcell"><div class="klab">Target MTD</div><div class="kval" id="achTarget"></div></div><div class="kcell"><div class="klab">Gap</div><div class="kval red" id="achGap"></div></div></div></div>
 <div class="card flow"><div class="title">⇄ &nbsp;Sales Flow Breakdown</div><div class="flowgrid"><div class="flowcell"><div class="flowlab">Sales to Distributor</div><div class="flowval" id="distVal"></div><div class="flowshare" id="distShare"></div><div class="track"><div class="fill-blue" id="distBar"></div></div></div><div class="flowcell"><div class="flowlab">Sales to Stores</div><div class="flowval" id="storeVal"></div><div class="flowshare" id="storeShare"></div><div class="track"><div class="fill-green" id="storeBar"></div></div></div></div></div>
@@ -440,7 +440,7 @@ select{width:100%;height:38px;border-radius:9px;border:1px solid #343946;backgro
 <div class="card ctrl-card"><div class="ctrl-head"><div class="title">◇ &nbsp;Sales by Product</div><div class="toggle"><button id="prodValue" class="active">Value</button><button id="prodQty">Quantity</button></div><div class="period" id="productPeriod"></div></div><div id="productRows"></div></div>
 <div class="card ctrl-card"><div class="ctrl-head"><div class="title">▦ &nbsp;Account Performance</div><div class="toggle"><button id="accValue" class="active">Value</button><button id="accQty">Quantity</button></div><div class="period" id="accountPeriod"></div></div><div id="accountRows"></div></div>
 <div class="card section insights"><div class="title">💡 &nbsp;Insights</div><div class="insight-grid" id="insightRows"></div></div>
-<div class="build">BUILD V12 TOP REVISION — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
+<div class="build">BUILD V13 TOP POLISH — 15 SEP 2026</div><div class="footer">OTOGARD &nbsp; | &nbsp; MODERN TRADE SALES MONITORING</div>
 </div>
 <script>
 const DATA=__DATA__,MONTHS=__MONTHS__;let selectedMonth="__DEFAULT__",productMetric="value",accountMetric="value";
